@@ -15,6 +15,13 @@ public class Combustivel {
         setRecomendacao(recomendacao);
     }
 
+    public Combustivel(int id, String nome, double preco, String recomendacao) {
+        setId(id);
+        setNome(nome);
+        setPreco(preco);
+        setRecomendacao(recomendacao);
+    }
+
     public int getId() {
         return id;
     }

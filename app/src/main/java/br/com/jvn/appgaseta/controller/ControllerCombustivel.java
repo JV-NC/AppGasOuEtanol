@@ -45,4 +45,15 @@ public class ControllerCombustivel extends GasEtaDB {
     public ArrayList<Combustivel> getListaDados(){
         return listarDados();
     }
+
+    public void alterar(Combustivel combustivel){
+        ContentValues dados = new ContentValues();
+
+        dados.put("id",combustivel.getId());
+        dados.put("nomeCombustivel",combustivel.getNome());
+        dados.put("precoCombustivel",combustivel.getPreco());
+        dados.put("recomendacao",combustivel.getRecomendacao());
+
+        alterarObj("Combustivel",dados);
+    }
 }

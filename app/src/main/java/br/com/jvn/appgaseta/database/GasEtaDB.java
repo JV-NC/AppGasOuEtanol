@@ -6,8 +6,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import androidx.annotation.Nullable;
-
 import java.util.ArrayList;
 
 import br.com.jvn.appgaseta.model.Combustivel;
@@ -40,11 +38,11 @@ public class GasEtaDB extends SQLiteOpenHelper {
 
     }
 
-    public void salvarObj(String tabela, ContentValues dados){
+    protected void salvarObj(String tabela, ContentValues dados){
         db.insert(tabela,null,dados);
     }
 
-    public ArrayList<Combustivel> listarDados(){
+    protected ArrayList<Combustivel> listarDados(){
         ArrayList<Combustivel> list = new ArrayList<>();
 
         Combustivel registro;
@@ -65,5 +63,11 @@ public class GasEtaDB extends SQLiteOpenHelper {
         }
 
         return list;
+    }
+
+    protected void alterarObj(String tabela,ContentValues dados){
+        //UPDATE TABLE SET campo=novoDado WHERE id=?
+        int id = dados.getAsInteger("id");
+        db.update(tabela,dados,"id=?",new String[]{String.valueOf(id)});
     }
 }
