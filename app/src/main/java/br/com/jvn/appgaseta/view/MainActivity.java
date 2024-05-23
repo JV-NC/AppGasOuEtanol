@@ -4,11 +4,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
 
 import br.com.jvn.appgaseta.R;
 import br.com.jvn.appgaseta.apoio.UtilGasEta;
@@ -35,6 +38,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         controller = new ControllerCombustivel(this);
+
+        //controller.alterar(new Combustivel(4,"Etanol",3.42,"Abastecer com Etanol")); //tst Alterar
+        //controller.deletar(4); //tst Deletar
+        ArrayList<Combustivel> list = controller.getListaDados(); //tst getLista
+        for(int i=0;i<list.size();i++){
+            Log.i("Banco de Dados","id: "+list.get(i).getId()+", nome: "+list.get(i).getNome()+", preço: "+list.get(i).getPreco()+", recomendação: "+list.get(i).getRecomendacao());
+        }
 
         setLayout();
         setButtons();
