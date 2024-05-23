@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">AppGasEta</string>
+    <string name="Titulo">Gasolina x Etanol</string>
+    <string name="hintValorGas">R$ Litro/Gasolina</string>
+    <string name="hintValorEta">R$ Litro/Etanol</string>
+    <string name="txtCalcular">CALCULAR</string>
+    <string name="txtResultado">RESULTADO</string>
+    <string name="txtSalvar">SALVAR</string>
+    <string name="txtLimpar">LIMPAR</string>
+    <string name="txtFinalizar">FINALIZAR</string>
 </resources>
