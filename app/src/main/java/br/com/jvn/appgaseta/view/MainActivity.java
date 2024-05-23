@@ -13,7 +13,6 @@ import android.widget.Toast;
 import br.com.jvn.appgaseta.R;
 import br.com.jvn.appgaseta.apoio.UtilGasEta;
 import br.com.jvn.appgaseta.controller.ControllerCombustivel;
-import br.com.jvn.appgaseta.database.GasEtaDB;
 import br.com.jvn.appgaseta.model.Combustivel;
 
 public class MainActivity extends AppCompatActivity {
@@ -25,7 +24,6 @@ public class MainActivity extends AppCompatActivity {
     Button btnSalvar;
     Button btnFinalizar;
 
-    GasEtaDB db;
     ControllerCombustivel controller;
     Combustivel Gas;
     Combustivel Eta;
@@ -37,7 +35,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         controller = new ControllerCombustivel(this);
-        db = new GasEtaDB(this);
 
         setLayout();
         setButtons();

@@ -1,5 +1,6 @@
 package br.com.jvn.appgaseta.database;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -8,8 +9,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import androidx.annotation.Nullable;
 
 public class GasEtaDB extends SQLiteOpenHelper {
-    public static final String DB_NAME = "gaseta.db";
-    public static final int DB_VERSION = 1;
+    private static final String DB_NAME = "gaseta.db";
+    private static final int DB_VERSION = 1;
     Cursor cursor;
     SQLiteDatabase db;
 
@@ -33,5 +34,9 @@ public class GasEtaDB extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
+    }
+
+    public void salvarObj(String tabela, ContentValues dados){
+        db.insert(tabela,null,dados);
     }
 }
