@@ -75,4 +75,8 @@ public class GasEtaDB extends SQLiteOpenHelper {
         //DELETE FROM TABLE WHERE id=?
         db.delete(tabela,"id=?",new String[]{String.valueOf(id)});
     }
+
+    protected void limparTabela(String tabela){
+        db.delete(tabela,null,null);
+    }
 }
