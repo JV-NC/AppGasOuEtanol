@@ -41,8 +41,23 @@ public class MainActivity extends AppCompatActivity {
         btnCalcular.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!TextUtils.isEmpty(tfValorGas.getText()) && !TextUtils.isEmpty(tfValorEta.getText())){
-                    Toast.makeText(MainActivity.this, UtilGasEta.calcularMelhorOpcao(Double.parseDouble(tfValorGas.getText().toString()),Double.parseDouble(tfValorEta.getText().toString()),UtilGasEta.PADRAO_70),Toast.LENGTH_LONG).show();
+                boolean verify = true;
+
+                if(TextUtils.isEmpty(tfValorGas.getText())){
+                    tfValorGas.setError("Obrigatório");
+                    tfValorGas.requestFocus();
+                    verify = false;
+                }
+                if(TextUtils.isEmpty(tfValorEta.getText())){
+                    tfValorEta.setError("Obrigatório");
+                    tfValorEta.requestFocus();
+                    verify = false;
+                }
+                if(verify){
+                    Toast.makeText(MainActivity.this, UtilGasEta.calcularMelhorOpcao(Double.parseDouble(tfValorGas.getText().toString()),Double.parseDouble(tfValorEta.getText().toString()),UtilGasEta.PADRAO_70),Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    Toast.makeText(MainActivity.this,"Falha ao Calcular!",Toast.LENGTH_SHORT).show();
                 }
             }
         });
