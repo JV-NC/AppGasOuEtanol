@@ -4,6 +4,8 @@ import android.content.ContentValues;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import java.util.ArrayList;
+
 import br.com.jvn.appgaseta.database.GasEtaDB;
 import br.com.jvn.appgaseta.model.Combustivel;
 import br.com.jvn.appgaseta.view.MainActivity;
@@ -38,5 +40,9 @@ public class ControllerCombustivel extends GasEtaDB {
     public void limpar(){
         dadosPreferences.clear();
         dadosPreferences.apply();
+    }
+
+    public ArrayList<Combustivel> getListaDados(){
+        return listarDados();
     }
 }

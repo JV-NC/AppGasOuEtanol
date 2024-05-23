@@ -1,14 +1,26 @@
 package br.com.jvn.appgaseta.model;
 
 public class Combustivel {
+    private int id;
     private String nome;
     private double preco;
     private String recomendacao;
 
-    public Combustivel(String nome, double preco,String recomendacao) {
+    public Combustivel() {
+    }
+
+    public Combustivel(String nome, double preco, String recomendacao) {
         setNome(nome);
         setPreco(preco);
         setRecomendacao(recomendacao);
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getNome() {

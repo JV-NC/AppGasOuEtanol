@@ -8,6 +8,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
 
+import java.util.ArrayList;
+
+import br.com.jvn.appgaseta.model.Combustivel;
+
 public class GasEtaDB extends SQLiteOpenHelper {
     private static final String DB_NAME = "gaseta.db";
     private static final int DB_VERSION = 1;
@@ -38,5 +42,28 @@ public class GasEtaDB extends SQLiteOpenHelper {
 
     public void salvarObj(String tabela, ContentValues dados){
         db.insert(tabela,null,dados);
+    }
+
+    public ArrayList<Combustivel> listarDados(){
+        ArrayList<Combustivel> list = new ArrayList<>();
+
+        Combustivel registro;
+        String querrySQL = "SELECT * FROM Combustivel";
+
+        cursor = db.rawQuery(querrySQL,null);
+
+        if(cursor.moveToFirst()){
+            do {
+                registro = new Combustivel();
+                registro.setId(cursor.getInt(0));
+                registro.setNome(cursor.getString(1));
+                registro.setPreco(cursor.getDouble(2));
+                registro.setRecomendacao(cursor.getString(3));
+
+                list.add(registro);
+            }while(cursor.moveToNext());
+        }
+
+        return list;
     }
 }
