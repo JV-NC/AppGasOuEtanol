@@ -12,6 +12,8 @@ import android.widget.Toast;
 
 import br.com.jvn.appgaseta.R;
 import br.com.jvn.appgaseta.apoio.UtilGasEta;
+import br.com.jvn.appgaseta.controller.ControllerCombustivel;
+import br.com.jvn.appgaseta.model.Combustivel;
 
 public class MainActivity extends AppCompatActivity {
     EditText tfValorGas;
@@ -22,10 +24,17 @@ public class MainActivity extends AppCompatActivity {
     Button btnSalvar;
     Button btnFinalizar;
 
+    ControllerCombustivel controller;
+    Combustivel Gas;
+    Combustivel Eta;
+    String recomendacao;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        controller = new ControllerCombustivel(this);
 
         setLayout();
         setButtons();
@@ -58,7 +67,12 @@ public class MainActivity extends AppCompatActivity {
                     verify = false;
                 }
                 if(verify){
-                    lblResultado.setText(UtilGasEta.calcularMelhorOpcao(Double.parseDouble(tfValorGas.getText().toString()),Double.parseDouble(tfValorEta.getText().toString()),UtilGasEta.PADRAO_70));
+                    recomendacao = UtilGasEta.calcularMelhorOpcao(Double.parseDouble(tfValorGas.getText().toString()),Double.parseDouble(tfValorEta.getText().toString()),UtilGasEta.PADRAO_70);
+
+                    Gas = new Combustivel("Gasolina",Double.parseDouble(tfValorGas.getText().toString()),recomendacao);
+                    Eta = new Combustivel("Etanol",Double.parseDouble(tfValorEta.getText().toString()),recomendacao);
+
+                    lblResultado.setText(recomendacao);
                     btnSalvar.setEnabled(true);
                 }
                 else{
@@ -75,7 +89,17 @@ public class MainActivity extends AppCompatActivity {
                 tfValorEta.setText("");
                 lblResultado.setText("");
 
+                controller.limpar();
+
                 btnSalvar.setEnabled(false);
+            }
+        });
+        btnSalvar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO: Inplementar banco de dados
+                controller.salvar(Gas);
+                controller.salvar(Eta);
             }
         });
         btnFinalizar.setOnClickListener(new View.OnClickListener() {
