@@ -39,12 +39,13 @@ public class MainActivity extends AppCompatActivity {
 
         controller = new ControllerCombustivel(this);
 
-        controller.alterar(new Combustivel(4,"Etanol",3.42,"Abastecer com Etanol")); //tst Alterar
+        //controller.alterar(new Combustivel(4,"Etanol",3.42,"Abastecer com Etanol")); //tst Alterar
+        //controller.deletar(4); //tst Deletar
         ArrayList<Combustivel> list = controller.getListaDados(); //tst getLista
         for(int i=0;i<list.size();i++){
             Log.i("Banco de Dados","id: "+list.get(i).getId()+", nome: "+list.get(i).getNome()+", preço: "+list.get(i).getPreco()+", recomendação: "+list.get(i).getRecomendacao());
         }
-        
+
         setLayout();
         setButtons();
     }

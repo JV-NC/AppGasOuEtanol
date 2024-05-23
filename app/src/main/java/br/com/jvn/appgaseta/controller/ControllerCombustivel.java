@@ -56,4 +56,8 @@ public class ControllerCombustivel extends GasEtaDB {
 
         alterarObj("Combustivel",dados);
     }
+
+    public void deletar(int id){
+        deletarObj("Combustivel",id);
+    }
 }
