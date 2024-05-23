@@ -1,4 +1,4 @@
-package br.com.jvn.appgaseta;
+package br.com.jvn.appgaseta.view;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import br.com.jvn.appgaseta.R;
 import br.com.jvn.appgaseta.apoio.UtilGasEta;
 
 public class MainActivity extends AppCompatActivity {
@@ -35,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
         btnLimpar = findViewById(R.id.btnLimpar);
         btnSalvar = findViewById(R.id.btnSalvar);
         btnFinalizar = findViewById(R.id.btnFinalizar);
+        btnSalvar.setEnabled(false);
     }
 
     private void setButtons(){
@@ -55,9 +57,11 @@ public class MainActivity extends AppCompatActivity {
                 }
                 if(verify){
                     Toast.makeText(MainActivity.this, UtilGasEta.calcularMelhorOpcao(Double.parseDouble(tfValorGas.getText().toString()),Double.parseDouble(tfValorEta.getText().toString()),UtilGasEta.PADRAO_70),Toast.LENGTH_SHORT).show();
+                    btnSalvar.setEnabled(true);
                 }
                 else{
                     Toast.makeText(MainActivity.this,"Falha ao Calcular!",Toast.LENGTH_SHORT).show();
+                    btnSalvar.setEnabled(false);
                 }
             }
         });
