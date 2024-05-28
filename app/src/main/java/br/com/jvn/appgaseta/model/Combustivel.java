@@ -1,6 +1,11 @@
 package br.com.jvn.appgaseta.model;
 
-public class Combustivel {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
+
+public class Combustivel implements Parcelable {
     private int id;
     private String nome;
     private double preco;
@@ -21,6 +26,25 @@ public class Combustivel {
         setPreco(preco);
         setRecomendacao(recomendacao);
     }
+
+    protected Combustivel(Parcel in) {
+        id = in.readInt();
+        nome = in.readString();
+        preco = in.readDouble();
+        recomendacao = in.readString();
+    }
+
+    public static final Creator<Combustivel> CREATOR = new Creator<Combustivel>() {
+        @Override
+        public Combustivel createFromParcel(Parcel in) {
+            return new Combustivel(in);
+        }
+
+        @Override
+        public Combustivel[] newArray(int size) {
+            return new Combustivel[size];
+        }
+    };
 
     public int getId() {
         return id;
@@ -52,5 +76,18 @@ public class Combustivel {
 
     public void setRecomendacao(String recomendacao) {
         this.recomendacao = recomendacao;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeString(nome);
+        dest.writeDouble(preco);
+        dest.writeString(recomendacao);
     }
 }

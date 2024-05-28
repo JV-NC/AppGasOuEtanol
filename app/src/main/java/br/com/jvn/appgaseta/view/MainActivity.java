@@ -117,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 ArrayList<Combustivel> list = controller.getListaDados();
                 Intent it = new Intent(MainActivity.this,RecyclerActivity.class);
-
+                it.putExtra("Lista",list);
                 startActivity(it);
             }
         });
