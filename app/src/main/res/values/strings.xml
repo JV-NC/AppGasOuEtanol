@@ -7,5 +7,6 @@
     <string name="txtResultado">RESULTADO</string>
     <string name="txtSalvar">SALVAR</string>
     <string name="txtLimpar">LIMPAR</string>
-    <string name="txtFinalizar">FINALIZAR</string>
+    <string name="txtListar">LISTAR</string>
+    <string name="txtTituloRecycler">Valores Salvos</string>
 </resources>

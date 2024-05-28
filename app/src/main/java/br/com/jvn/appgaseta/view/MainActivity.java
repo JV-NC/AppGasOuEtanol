@@ -2,6 +2,7 @@ package br.com.jvn.appgaseta.view;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -25,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
     Button btnCalcular;
     Button btnLimpar;
     Button btnSalvar;
-    Button btnFinalizar;
+    Button btnListar;
 
     ControllerCombustivel controller;
     Combustivel Gas;
@@ -57,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
         btnCalcular = findViewById(R.id.btnCalcular);
         btnLimpar = findViewById(R.id.btnLimpar);
         btnSalvar = findViewById(R.id.btnSalvar);
-        btnFinalizar = findViewById(R.id.btnFinalizar);
+        btnListar = findViewById(R.id.btnListar);
     }
 
     private void setButtons(){
@@ -107,15 +108,17 @@ public class MainActivity extends AppCompatActivity {
         btnSalvar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: Inplementar banco de dados
                 controller.salvar(Gas);
                 controller.salvar(Eta);
             }
         });
-        btnFinalizar.setOnClickListener(new View.OnClickListener() {
+        btnListar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                ArrayList<Combustivel> list = controller.getListaDados();
+                Intent it = new Intent(MainActivity.this,RecyclerActivity.class);
+
+                startActivity(it);
             }
         });
     }
