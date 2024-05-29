@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         //controller.deletar(4); //tst Deletar
         ArrayList<Combustivel> list = controller.getListaDados(); //tst getLista
         for(int i=0;i<list.size();i++){
-            Log.i("Banco de Dados","id: "+list.get(i).getId()+", nome: "+list.get(i).getNome()+", preço: "+list.get(i).getPreco()+", recomendação: "+list.get(i).getRecomendacao());
+            Log.i("Banco de Dados",list.get(i).toString());
         }
 
         setLayout();
@@ -116,9 +116,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 ArrayList<Combustivel> list = controller.getListaDados();
-                for (int i=0;i<list.size();i++){
-                    Log.i("Lista",list.get(i).toString());
-                }
                 Intent it = new Intent(MainActivity.this,RecyclerActivity.class);
                 it.putExtra("Lista",list);
                 startActivity(it);
