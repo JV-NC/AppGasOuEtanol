@@ -118,12 +118,16 @@ public class MainActivity extends AppCompatActivity {
         btnListar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ArrayList<String> stringList = new ArrayList<>();
                 ArrayList<Combustivel> list = controller.getListaDados();
                 for(int i=0;i<list.size();i++){
                     Log.i("Banco de Dados",list.get(i).toString());
+                    stringList.add(list.get(i).getDate().toString());
+
                 }
                 Intent it = new Intent(MainActivity.this,RecyclerActivity.class);
                 it.putExtra("Lista",list);
+                it.putExtra("stringList",stringList);
                 startActivity(it);
             }
         });

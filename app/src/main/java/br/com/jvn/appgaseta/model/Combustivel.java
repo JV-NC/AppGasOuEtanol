@@ -87,6 +87,11 @@ public class Combustivel implements Parcelable {
         return date;
     }
 
+    public String getDateFormated(){
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        return df.format(date);
+    }
+
     public void setDate(Date date) {
         this.date = date;
     }

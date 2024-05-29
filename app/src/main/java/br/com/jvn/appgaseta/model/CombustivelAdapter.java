@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import br.com.jvn.appgaseta.R;
@@ -47,12 +48,14 @@ public class CombustivelAdapter extends RecyclerView.Adapter<CombustivelAdapter.
         TextView lblNome;
         TextView lblPreco;
         TextView lblRecomendacao;
+        TextView lblDate;
         public CombustivelViewHolder(@NonNull View itemView) {
             super(itemView);
             lblIcon = itemView.findViewById(R.id.lblIcon);
             lblNome = itemView.findViewById(R.id.lblNome);
             lblPreco = itemView.findViewById(R.id.lblPreco);
             lblRecomendacao = itemView.findViewById(R.id.lblRecomendacao);
+            lblDate = itemView.findViewById(R.id.lblDate);
         }
 
         public void bind(Combustivel combustivel) {
@@ -67,6 +70,7 @@ public class CombustivelAdapter extends RecyclerView.Adapter<CombustivelAdapter.
             lblNome.setText(combustivel.getNome());
             lblPreco.setText("R$ "+df.format(combustivel.getPreco()));
             lblRecomendacao.setText(combustivel.getRecomendacao());
+            lblDate.setText(combustivel.getDateFormated());
         }
     }
 
