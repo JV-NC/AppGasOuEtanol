@@ -1,10 +1,20 @@
 package br.com.jvn.appgaseta.model;
 
-public class Combustivel {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+public class Combustivel implements Parcelable {
     private int id;
     private String nome;
     private double preco;
     private String recomendacao;
+    private Date date;
 
     public Combustivel() {
     }
@@ -21,6 +31,25 @@ public class Combustivel {
         setPreco(preco);
         setRecomendacao(recomendacao);
     }
+
+    protected Combustivel(Parcel in) {
+        id = in.readInt();
+        nome = in.readString();
+        preco = in.readDouble();
+        recomendacao = in.readString();
+    }
+
+    public static final Creator<Combustivel> CREATOR = new Creator<Combustivel>() {
+        @Override
+        public Combustivel createFromParcel(Parcel in) {
+            return new Combustivel(in);
+        }
+
+        @Override
+        public Combustivel[] newArray(int size) {
+            return new Combustivel[size];
+        }
+    };
 
     public int getId() {
         return id;
@@ -52,5 +81,42 @@ public class Combustivel {
 
     public void setRecomendacao(String recomendacao) {
         this.recomendacao = recomendacao;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public String getDateFormated(){
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        return df.format(date);
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public void setDate(String date) throws ParseException {
+        SimpleDateFormat df = new SimpleDateFormat("EEE MMM dd hh:mm:ss zzz yyyy");
+        this.date = df.parse(date);
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return nome+", R$"+String.valueOf(preco)+", "+recomendacao+", "+date.toString();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeString(nome);
+        dest.writeDouble(preco);
+        dest.writeString(recomendacao);
     }
 }

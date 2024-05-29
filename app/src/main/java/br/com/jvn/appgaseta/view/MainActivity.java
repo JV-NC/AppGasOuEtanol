@@ -2,6 +2,7 @@ package br.com.jvn.appgaseta.view;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import br.com.jvn.appgaseta.R;
 import br.com.jvn.appgaseta.apoio.UtilGasEta;
@@ -25,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
     Button btnCalcular;
     Button btnLimpar;
     Button btnSalvar;
-    Button btnFinalizar;
+    Button btnListar;
 
     ControllerCombustivel controller;
     Combustivel Gas;
@@ -43,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
         //controller.deletar(4); //tst Deletar
         ArrayList<Combustivel> list = controller.getListaDados(); //tst getLista
         for(int i=0;i<list.size();i++){
-            Log.i("Banco de Dados","id: "+list.get(i).getId()+", nome: "+list.get(i).getNome()+", preço: "+list.get(i).getPreco()+", recomendação: "+list.get(i).getRecomendacao());
+            Log.i("Banco de Dados",list.get(i).toString());
         }
 
         setLayout();
@@ -57,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
         btnCalcular = findViewById(R.id.btnCalcular);
         btnLimpar = findViewById(R.id.btnLimpar);
         btnSalvar = findViewById(R.id.btnSalvar);
-        btnFinalizar = findViewById(R.id.btnFinalizar);
+        btnListar = findViewById(R.id.btnListar);
     }
 
     private void setButtons(){
@@ -107,15 +109,26 @@ public class MainActivity extends AppCompatActivity {
         btnSalvar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: Inplementar banco de dados
+                Gas.setDate(Calendar.getInstance().getTime());
+                Eta.setDate(Calendar.getInstance().getTime());
                 controller.salvar(Gas);
                 controller.salvar(Eta);
             }
         });
-        btnFinalizar.setOnClickListener(new View.OnClickListener() {
+        btnListar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                ArrayList<String> stringList = new ArrayList<>();
+                ArrayList<Combustivel> list = controller.getListaDados();
+                for(int i=0;i<list.size();i++){
+                    Log.i("Banco de Dados",list.get(i).toString());
+                    stringList.add(list.get(i).getDate().toString());
+
+                }
+                Intent it = new Intent(MainActivity.this,RecyclerActivity.class);
+                it.putExtra("Lista",list);
+                it.putExtra("stringList",stringList);
+                startActivity(it);
             }
         });
     }
