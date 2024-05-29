@@ -5,11 +5,16 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class Combustivel implements Parcelable {
     private int id;
     private String nome;
     private double preco;
     private String recomendacao;
+    private Date date;
 
     public Combustivel() {
     }
@@ -76,6 +81,25 @@ public class Combustivel implements Parcelable {
 
     public void setRecomendacao(String recomendacao) {
         this.recomendacao = recomendacao;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public void setDate(String date) throws ParseException {
+        SimpleDateFormat df = new SimpleDateFormat("EEE MMM dd hh:mm:ss zzz yyyy");
+        this.date = df.parse(date);
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return nome+", R$"+String.valueOf(preco)+", "+recomendacao+", "+date.toString();
     }
 
     @Override

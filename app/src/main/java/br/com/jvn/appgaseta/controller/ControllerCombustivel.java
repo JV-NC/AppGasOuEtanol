@@ -22,6 +22,7 @@ public class ControllerCombustivel extends GasEtaDB {
         dados.put("nomeCombustivel",combustivel.getNome());
         dados.put("precoCombustivel",combustivel.getPreco());
         dados.put("recomendacao",combustivel.getRecomendacao());
+        dados.put("date",combustivel.getDate().toString());
 
         salvarObj("Combustivel",dados);
     }
@@ -41,6 +42,7 @@ public class ControllerCombustivel extends GasEtaDB {
         dados.put("nomeCombustivel",combustivel.getNome());
         dados.put("precoCombustivel",combustivel.getPreco());
         dados.put("recomendacao",combustivel.getRecomendacao());
+        dados.put("date",combustivel.getDate().toString());
 
         alterarObj("Combustivel",dados);
     }

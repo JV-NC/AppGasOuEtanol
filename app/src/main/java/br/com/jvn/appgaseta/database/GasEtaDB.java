@@ -5,7 +5,10 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
+import java.sql.Date;
+import java.text.ParseException;
 import java.util.ArrayList;
 
 import br.com.jvn.appgaseta.model.Combustivel;
@@ -28,7 +31,8 @@ public class GasEtaDB extends SQLiteOpenHelper {
         String sqlTabelaCombustivel = "CREATE TABLE Combustivel(id INTEGER PRIMARY KEY AUTOINCREMENT, "+
                 "nomeCombustivel TEXT, "+
                 "precoCombustivel REAL, "+
-                "recomendacao TEXT)";
+                "recomendacao TEXT, "+
+                "date TEXT)";
 
         db.execSQL(sqlTabelaCombustivel);
     }
@@ -57,6 +61,11 @@ public class GasEtaDB extends SQLiteOpenHelper {
                 registro.setNome(cursor.getString(1));
                 registro.setPreco(cursor.getDouble(2));
                 registro.setRecomendacao(cursor.getString(3));
+                try {
+                    registro.setDate(cursor.getString(4));
+                } catch (ParseException e) {
+                    Log.e("Falha em DateFormat","Falha ao obter: "+cursor.getString(4));
+                }
 
                 list.add(registro);
             }while(cursor.moveToNext());

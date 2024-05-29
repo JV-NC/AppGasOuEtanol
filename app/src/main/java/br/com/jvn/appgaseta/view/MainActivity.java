@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import br.com.jvn.appgaseta.R;
 import br.com.jvn.appgaseta.apoio.UtilGasEta;
@@ -108,6 +109,8 @@ public class MainActivity extends AppCompatActivity {
         btnSalvar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Gas.setDate(Calendar.getInstance().getTime());
+                Eta.setDate(Calendar.getInstance().getTime());
                 controller.salvar(Gas);
                 controller.salvar(Eta);
             }
@@ -116,6 +119,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 ArrayList<Combustivel> list = controller.getListaDados();
+                for(int i=0;i<list.size();i++){
+                    Log.i("Banco de Dados",list.get(i).toString());
+                }
                 Intent it = new Intent(MainActivity.this,RecyclerActivity.class);
                 it.putExtra("Lista",list);
                 startActivity(it);
