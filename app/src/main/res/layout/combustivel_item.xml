@@ -30,7 +30,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:text="Gasolina"
-        android:textColor="@color/black"
+        android:textStyle="bold"
         android:textSize="18sp"
         android:layout_toEndOf="@id/lblIcon"
         android:layout_alignTop="@id/lblIcon" />
@@ -43,7 +43,7 @@
             android:layout_toEndOf="@id/lblNome"
             android:text="Preço"
             android:textAlignment="textEnd"
-            android:textColor="@color/black"
+            android:textStyle="bold"
             android:textSize="16sp" />
 
     <TextView
@@ -51,7 +51,7 @@
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:text="0.79"
+        android:text="50%"
         android:textSize="16sp"
         android:layout_below="@id/lblNome"
         android:layout_toEndOf="@id/lblIcon"/>

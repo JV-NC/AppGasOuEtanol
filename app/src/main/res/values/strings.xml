@@ -9,4 +9,6 @@
     <string name="txtLimpar">LIMPAR</string>
     <string name="txtListar">LISTAR</string>
     <string name="txtTituloRecycler">Valores Salvos</string>
+    <string name="txtClose">Close</string>
+    <string name="txtLista">Lista de Dados</string>
 </resources>
