@@ -28,13 +28,8 @@ CombustivelAdapter combustivelAdapter;
         setContentView(R.layout.recycler_activity);
 
         list = getIntent().getParcelableArrayListExtra("Lista");
-        ArrayList<String> stringList = getIntent().getStringArrayListExtra("stringList");
-        for (int i=0;i<list.size();i++){
-            try {
-                list.get(i).setDate(stringList.get(i));
-            } catch (ParseException e) {
-                Log.e("Erro nas listas",stringList.get(i));
-            }
+        if(list.size()==0){
+            Log.e("List Parse","Lista Vazia");
         }
 
         rv = findViewById(R.id.recyclerGasEta);

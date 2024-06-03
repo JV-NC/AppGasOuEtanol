@@ -15,8 +15,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import br.com.jvn.appgaseta.R;
+import br.com.jvn.appgaseta.apoio.UtilGasEta;
 
 public class CombustivelAdapter extends RecyclerView.Adapter<CombustivelAdapter.CombustivelViewHolder> {
     private final ArrayList<Combustivel> combustiveis;
@@ -47,19 +49,19 @@ public class CombustivelAdapter extends RecyclerView.Adapter<CombustivelAdapter.
         TextView lblIcon;
         TextView lblNome;
         TextView lblPreco;
-        TextView lblRecomendacao;
+        TextView lblRazao;
         TextView lblDate;
         public CombustivelViewHolder(@NonNull View itemView) {
             super(itemView);
             lblIcon = itemView.findViewById(R.id.lblIcon);
             lblNome = itemView.findViewById(R.id.lblNome);
             lblPreco = itemView.findViewById(R.id.lblPreco);
-            lblRecomendacao = itemView.findViewById(R.id.lblRecomendacao);
+            lblRazao = itemView.findViewById(R.id.lblRazao);
             lblDate = itemView.findViewById(R.id.lblDate);
         }
 
         public void bind(Combustivel combustivel) {
-            DecimalFormat df = new DecimalFormat("##.00");
+            DecimalFormat df = new DecimalFormat("#0.00");
             lblIcon.setText(String.valueOf(combustivel.getNome().charAt(0)));
             if(combustivel.getNome().compareTo("Gasolina")==0){
                 lblIcon.setBackground(oval(Color.rgb(192,0,0),lblIcon));
@@ -69,8 +71,8 @@ public class CombustivelAdapter extends RecyclerView.Adapter<CombustivelAdapter.
             }
             lblNome.setText(combustivel.getNome());
             lblPreco.setText("R$ "+df.format(combustivel.getPreco()));
-            lblRecomendacao.setText(combustivel.getRecomendacao());
-            lblDate.setText(combustivel.getDateFormated());
+            lblRazao.setText(df.format(combustivel.getRazao()*100)+"%");
+            lblDate.setText(combustivel.getDate());
         }
     }
 

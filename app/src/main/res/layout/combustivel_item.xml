@@ -47,11 +47,11 @@
             android:textSize="16sp" />
 
     <TextView
-        android:id="@+id/lblRecomendacao"
-        android:layout_width="180dp"
+        android:id="@+id/lblRazao"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:text="Abastecer com Etanol"
+        android:text="0.79"
         android:textSize="16sp"
         android:layout_below="@id/lblNome"
         android:layout_toEndOf="@id/lblIcon"/>
@@ -61,10 +61,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:text="01/01/1999"
+        android:text="1999/01/01 10:10:10"
         android:textSize="16dp"
         android:textAlignment="textEnd"
-        android:layout_toEndOf="@id/lblRecomendacao"
+        android:layout_toEndOf="@id/lblRazao"
         android:layout_below="@id/lblNome"/>
 
     </RelativeLayout>

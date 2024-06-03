@@ -13,79 +13,85 @@ import java.util.ArrayList;
 
 import br.com.jvn.appgaseta.model.Combustivel;
 
-public class GasEtaDB extends SQLiteOpenHelper {
-    private static final String DB_NAME = "gaseta.db";
-    private static final int DB_VERSION = 1;
-    Cursor cursor;
-    SQLiteDatabase db;
+public class GasEtaDB{
+    private SQLiteDatabase db;
+    private int versaodb;
 
-    public GasEtaDB(Context context) {
-        super(context,DB_NAME,null,DB_VERSION);
-
-        db = getWritableDatabase();
+    @SuppressWarnings("static-access")
+    public GasEtaDB(Context context){
+        GasEtaDBCore auxdb = new GasEtaDBCore(context);
+        versaodb = auxdb.VERSAO_DB;
+        db = auxdb.getWritableDatabase();
     }
 
-    @Override
-    public void onCreate(SQLiteDatabase db) {
-        //Querry SQL criar tabela
-        String sqlTabelaCombustivel = "CREATE TABLE Combustivel(id INTEGER PRIMARY KEY AUTOINCREMENT, "+
-                "nomeCombustivel TEXT, "+
-                "precoCombustivel REAL, "+
-                "recomendacao TEXT, "+
-                "date TEXT)";
-
-        db.execSQL(sqlTabelaCombustivel);
+    public void fechar(){
+        db.close();
     }
 
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+    public void runSQL(String sql){
+        Log.e("runSQL",sql);
+        try {
+            db.execSQL(sql);
+        }catch (Exception e){
+            Log.e("DB","Impossível executar sql: "+sql+ "- Motivo: "+e.getMessage());
+        }
     }
 
-    protected void salvarObj(String tabela, ContentValues dados){
-        db.insert(tabela,null,dados);
+    public void runSQLSemLog(String sql){
+        try {
+            db.execSQL(sql);
+        }catch (Exception e){
+
+        }
+        Log.i("DB",sql);
     }
 
-    protected ArrayList<Combustivel> listarDados(){
-        ArrayList<Combustivel> list = new ArrayList<>();
+    public int getVersaodb(){
+        return versaodb;
+    }
 
-        Combustivel registro;
-        String querrySQL = "SELECT * FROM Combustivel";
+    public Cursor abreRAWSQL(String sql){
+        Log.e("ABRE RAW",sql);
 
-        cursor = db.rawQuery(querrySQL,null);
+        Cursor cursor = null;
 
-        if(cursor.moveToFirst()){
-            do {
-                registro = new Combustivel();
-                registro.setId(cursor.getInt(0));
-                registro.setNome(cursor.getString(1));
-                registro.setPreco(cursor.getDouble(2));
-                registro.setRecomendacao(cursor.getString(3));
-                try {
-                    registro.setDate(cursor.getString(4));
-                } catch (ParseException e) {
-                    Log.e("Falha em DateFormat","Falha ao obter: "+cursor.getString(4));
-                }
-
-                list.add(registro);
-            }while(cursor.moveToNext());
+        try {
+            cursor = db.rawQuery(sql,null);
+        }catch (Exception e){
+            Log.e("ABRE RAW","Impossível abrir sql: "+sql+ "- Motivo: "+e.getMessage());
         }
 
-        return list;
+        return cursor;
     }
 
-    protected void alterarObj(String tabela,ContentValues dados){
-        //UPDATE TABLE SET campo=novoDado WHERE id=?
-        int id = dados.getAsInteger("id");
-        db.update(tabela,dados,"id=?",new String[]{String.valueOf(id)});
+    public Cursor abreSQL(String table, String[]columns, String selection, String[] selectionArgs, String groupBy, String having, String orderBy){
+        Cursor cursor = db.query(table, columns, selection, selectionArgs, groupBy, having, orderBy, orderBy);
+        return cursor;
     }
 
-    protected void deletarObj(String tabela,int id){
-        //DELETE FROM TABLE WHERE id=?
-        db.delete(tabela,"id=?",new String[]{String.valueOf(id)});
+    public String getConfig(String nomecampo){
+        //Log.e("getConfig,nomecampo);
+        String campo = "";
+        try {
+            Cursor cursor = db.rawQuery("select * from tbconfig where idconfig=1",null);
+            cursor.moveToFirst();
+            campo = cursor.getString(cursor.getColumnIndexOrThrow(nomecampo)).toString();
+            //Log.e("Valor",campo);
+        }catch (Exception e){
+            Log.e("getConfig", "Falha ao ler valor de "+nomecampo+" - Motivo: "+e.getMessage());
+        }
+
+        if(campo==null){
+            campo="";
+        }
+        return campo;
     }
 
-    protected void limparTabela(String tabela){
-        db.delete(tabela,null,null);
+    public void setConfig(String nomecampo, String valor){
+        try{
+            db.execSQL("update tbconfig set"+nomecampo+" = '"+valor+"''");
+        }catch (Exception e){
+            Log.e("setConfig","Falha ao rodar update - Motivo: "+e.getMessage());
+        }
     }
 }

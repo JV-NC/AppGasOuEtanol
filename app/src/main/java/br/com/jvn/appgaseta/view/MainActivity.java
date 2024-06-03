@@ -14,10 +14,12 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 import br.com.jvn.appgaseta.R;
 import br.com.jvn.appgaseta.apoio.UtilGasEta;
 import br.com.jvn.appgaseta.controller.ControllerCombustivel;
+import br.com.jvn.appgaseta.database.GasEtaDB;
 import br.com.jvn.appgaseta.model.Combustivel;
 
 public class MainActivity extends AppCompatActivity {
@@ -29,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     Button btnSalvar;
     Button btnListar;
 
+    GasEtaDB db;
     ControllerCombustivel controller;
     Combustivel Gas;
     Combustivel Eta;
@@ -39,11 +42,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        controller = new ControllerCombustivel(this);
+        db = new GasEtaDB(MainActivity.this);
+        controller = new ControllerCombustivel();
 
         //controller.alterar(new Combustivel(4,"Etanol",3.42,"Abastecer com Etanol")); //tst Alterar
         //controller.deletar(4); //tst Deletar
-        ArrayList<Combustivel> list = controller.getListaDados(); //tst getLista
+        ArrayList<Combustivel> list = controller.getListaDados(db); //tst getLista
         for(int i=0;i<list.size();i++){
             Log.i("Banco de Dados",list.get(i).toString());
         }
@@ -66,70 +70,90 @@ public class MainActivity extends AppCompatActivity {
         btnCalcular.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean verify = true;
-
-                if(TextUtils.isEmpty(tfValorGas.getText())){
-                    tfValorGas.setError("Obrigatório");
-                    tfValorGas.requestFocus();
-                    verify = false;
-                }
-                if(TextUtils.isEmpty(tfValorEta.getText())){
-                    tfValorEta.setError("Obrigatório");
-                    tfValorEta.requestFocus();
-                    verify = false;
-                }
-                if(verify){
-                    recomendacao = UtilGasEta.calcularMelhorOpcao(Double.parseDouble(tfValorGas.getText().toString()),Double.parseDouble(tfValorEta.getText().toString()),UtilGasEta.PADRAO_70);
-
-                    Gas = new Combustivel("Gasolina",Double.parseDouble(tfValorGas.getText().toString()),recomendacao);
-                    Eta = new Combustivel("Etanol",Double.parseDouble(tfValorEta.getText().toString()),recomendacao);
-
-                    lblResultado.setText(recomendacao);
-                    btnSalvar.setEnabled(true);
-                }
-                else{
-                    Toast.makeText(MainActivity.this,"Falha ao Calcular!",Toast.LENGTH_SHORT).show();
-                    btnSalvar.setEnabled(false);
-                    lblResultado.setText("");
-                }
+                calcular();
             }
         });
         btnLimpar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                tfValorGas.setText("");
-                tfValorEta.setText("");
-                lblResultado.setText("");
-
-                controller.limpar();
-
-                btnSalvar.setEnabled(false);
+                limpar();
             }
         });
         btnSalvar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Gas.setDate(Calendar.getInstance().getTime());
-                Eta.setDate(Calendar.getInstance().getTime());
-                controller.salvar(Gas);
-                controller.salvar(Eta);
+                salvar();
             }
         });
         btnListar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ArrayList<String> stringList = new ArrayList<>();
-                ArrayList<Combustivel> list = controller.getListaDados();
+                ArrayList<Combustivel> list = controller.getListaDados(db);
                 for(int i=0;i<list.size();i++){
                     Log.i("Banco de Dados",list.get(i).toString());
-                    stringList.add(list.get(i).getDate().toString());
 
                 }
                 Intent it = new Intent(MainActivity.this,RecyclerActivity.class);
                 it.putExtra("Lista",list);
-                it.putExtra("stringList",stringList);
                 startActivity(it);
             }
         });
+    }
+
+    private boolean checkTextFields(){
+        boolean verify = true; //verifica se os campos estão vazios
+        if(TextUtils.isEmpty(tfValorGas.getText()) || tfValorGas.getText().toString().compareTo(".")==0){
+            tfValorGas.setError("Obrigatório");
+            tfValorGas.requestFocus();
+            verify = false;
+        }
+        if(TextUtils.isEmpty(tfValorEta.getText()) || tfValorEta.getText().toString().compareTo(".")==0){
+            tfValorEta.setError("Obrigatório");
+            tfValorEta.requestFocus();
+            verify = false;
+        }
+        return verify;
+    }
+
+    private void calcular(){
+        if(checkTextFields()){
+            recomendacao = UtilGasEta.calcularMelhorOpcao(Double.parseDouble(tfValorGas.getText().toString()),Double.parseDouble(tfValorEta.getText().toString()),UtilGasEta.PADRAO_70);
+            double razao = UtilGasEta.calcularRazao(Double.parseDouble(tfValorEta.getText().toString()),Double.parseDouble(tfValorGas.getText().toString()));
+
+            Gas = new Combustivel("Gasolina",Double.parseDouble(tfValorGas.getText().toString()),razao);
+            Eta = new Combustivel("Etanol",Double.parseDouble(tfValorEta.getText().toString()),razao);
+
+            lblResultado.setText(recomendacao);
+            btnSalvar.setEnabled(true);
+        }
+        else{
+            Toast.makeText(MainActivity.this,"Falha ao Calcular!",Toast.LENGTH_SHORT).show();
+            btnSalvar.setEnabled(false);
+            lblResultado.setText("");
+        }
+    }
+
+    private void limpar(){
+        tfValorGas.setText("");
+        tfValorEta.setText("");
+        lblResultado.setText("");
+
+        controller.limpar(db);
+
+        btnSalvar.setEnabled(false);
+    }
+
+    private void salvar(){
+        if(checkTextFields()){
+            String date = UtilGasEta.retornaData("yyyy/MM/dd HH:mm:ss",new Date(),0); //recebe a data do momento atual
+            Gas.setDate(date);
+            Eta.setDate(date);
+
+            controller.salvar(Gas,db);
+            controller.salvar(Eta,db);
+
+            Toast.makeText(MainActivity.this,"Valores Salvos com Sucesso!",Toast.LENGTH_SHORT).show();
+            btnSalvar.setEnabled(false);
+        }
     }
 }

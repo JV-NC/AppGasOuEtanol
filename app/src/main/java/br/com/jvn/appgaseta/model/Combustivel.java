@@ -13,30 +13,31 @@ public class Combustivel implements Parcelable {
     private int id;
     private String nome;
     private double preco;
-    private String recomendacao;
-    private Date date;
+    private double razao;
+    private String date;
 
     public Combustivel() {
     }
 
-    public Combustivel(String nome, double preco, String recomendacao) {
+    public Combustivel(String nome, double preco, double razao) {
         setNome(nome);
         setPreco(preco);
-        setRecomendacao(recomendacao);
+        setRazao(razao);
     }
 
-    public Combustivel(int id, String nome, double preco, String recomendacao) {
+    public Combustivel(int id, String nome, double preco, double razao) {
         setId(id);
         setNome(nome);
         setPreco(preco);
-        setRecomendacao(recomendacao);
+        setRazao(razao);
     }
 
     protected Combustivel(Parcel in) {
         id = in.readInt();
         nome = in.readString();
         preco = in.readDouble();
-        recomendacao = in.readString();
+        razao = in.readDouble();
+        date = in.readString();
     }
 
     public static final Creator<Combustivel> CREATOR = new Creator<Combustivel>() {
@@ -75,36 +76,31 @@ public class Combustivel implements Parcelable {
         this.preco = preco;
     }
 
-    public String getRecomendacao() {
-        return recomendacao;
+    public double getRazao() {
+        return razao;
     }
 
-    public void setRecomendacao(String recomendacao) {
-        this.recomendacao = recomendacao;
+    public void setRazao(Double razao) {
+        this.razao = (razao>=0.0) ? razao : 0;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public String getDateFormated(){
-        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-        return df.format(date);
-    }
-
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
-    public void setDate(String date) throws ParseException {
+    /*public void setDate(String date) throws ParseException {
         SimpleDateFormat df = new SimpleDateFormat("EEE MMM dd hh:mm:ss zzz yyyy");
         this.date = df.parse(date);
-    }
+    }*/
 
     @NonNull
     @Override
     public String toString() {
-        return nome+", R$"+String.valueOf(preco)+", "+recomendacao+", "+date.toString();
+        return nome+", R$"+String.valueOf(preco)+", Razão Gas/Eta: "+razao+", "+date;
     }
 
     @Override
@@ -117,6 +113,7 @@ public class Combustivel implements Parcelable {
         dest.writeInt(id);
         dest.writeString(nome);
         dest.writeDouble(preco);
-        dest.writeString(recomendacao);
+        dest.writeDouble(razao);
+        dest.writeString(date);
     }
 }
