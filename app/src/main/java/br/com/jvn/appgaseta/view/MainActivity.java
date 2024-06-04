@@ -1,16 +1,22 @@
 package br.com.jvn.appgaseta.view;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.material.bottomappbar.BottomAppBar;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -23,13 +29,13 @@ import br.com.jvn.appgaseta.database.GasEtaDB;
 import br.com.jvn.appgaseta.model.Combustivel;
 
 public class MainActivity extends AppCompatActivity {
+    Toolbar toolbar;
+    BottomAppBar bottomAppBar;
     EditText tfValorGas;
     EditText tfValorEta;
     TextView lblResultado;
     Button btnCalcular;
-    Button btnLimpar;
-    Button btnSalvar;
-    Button btnListar;
+    boolean canSave = false;
 
     GasEtaDB db;
     ControllerCombustivel controller;
@@ -56,14 +62,35 @@ public class MainActivity extends AppCompatActivity {
         setButtons();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.toolbar_main_menu,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+        if(id == R.id.itemSettings){
+            Toast.makeText(MainActivity.this,"Ir para Settings",Toast.LENGTH_SHORT).show();
+        } else if(id == R.id.itemAbout) {
+            Toast.makeText(MainActivity.this,"Ir para About",Toast.LENGTH_SHORT).show();
+        } else if(id == R.id.itemExit) {
+            finish();
+        }
+        return true;
+    }
+
     private void setLayout(){
+        toolbar = findViewById(R.id.toolbarMain);
+        setSupportActionBar(toolbar);
+
+        bottomAppBar = findViewById(R.id.bottomAppbar);
         tfValorGas = findViewById(R.id.tfValorGas);
         tfValorEta = findViewById(R.id.tfValorEta);
         lblResultado = findViewById(R.id.lblResultado);
         btnCalcular = findViewById(R.id.btnCalcular);
-        btnLimpar = findViewById(R.id.btnLimpar);
-        btnSalvar = findViewById(R.id.btnSalvar);
-        btnListar = findViewById(R.id.btnListar);
     }
 
     private void setButtons(){
@@ -73,29 +100,27 @@ public class MainActivity extends AppCompatActivity {
                 calcular();
             }
         });
-        btnLimpar.setOnClickListener(new View.OnClickListener() {
+        bottomAppBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
-            public void onClick(View v) {
-                limpar();
-            }
-        });
-        btnSalvar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                salvar();
-            }
-        });
-        btnListar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ArrayList<Combustivel> list = controller.getListaDados(db);
-                for(int i=0;i<list.size();i++){
-                    Log.i("Banco de Dados",list.get(i).toString());
+            public boolean onMenuItemClick(MenuItem item) {
+                int id =item.getItemId();
 
+                if(id == R.id.itemBottomLimpar){
+                    limpar();
                 }
-                Intent it = new Intent(MainActivity.this,RecyclerActivity.class);
-                it.putExtra("Lista",list);
-                startActivity(it);
+                else if(id == R.id.itemBottomSalvar){
+                    if(canSave){
+                        salvar();
+                        //canSave = false;
+                    }
+                    else{
+                        Toast.makeText(MainActivity.this, "Não é possível salvar", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                else if(id == R.id.itemBottomListar){
+                    listar();
+                }
+                return true;
             }
         });
     }
@@ -124,11 +149,11 @@ public class MainActivity extends AppCompatActivity {
             Eta = new Combustivel("Etanol",Double.parseDouble(tfValorEta.getText().toString()),razao);
 
             lblResultado.setText(recomendacao);
-            btnSalvar.setEnabled(true);
+            canSave = true;
         }
         else{
             Toast.makeText(MainActivity.this,"Falha ao Calcular!",Toast.LENGTH_SHORT).show();
-            btnSalvar.setEnabled(false);
+            canSave = false;
             lblResultado.setText("");
         }
     }
@@ -140,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
 
         controller.limpar(db);
 
-        btnSalvar.setEnabled(false);
+        canSave = false;
     }
 
     private void salvar(){
@@ -153,7 +178,19 @@ public class MainActivity extends AppCompatActivity {
             controller.salvar(Eta,db);
 
             Toast.makeText(MainActivity.this,"Valores Salvos com Sucesso!",Toast.LENGTH_SHORT).show();
-            btnSalvar.setEnabled(false);
+            canSave = false;
+
         }
+    }
+
+    private void listar(){
+        ArrayList<Combustivel> list = controller.getListaDados(db);
+        for(int i=0;i<list.size();i++){
+            Log.i("Banco de Dados",list.get(i).toString());
+
+        }
+        Intent it = new Intent(MainActivity.this,RecyclerActivity.class);
+        it.putExtra("Lista",list);
+        startActivity(it);
     }
 }

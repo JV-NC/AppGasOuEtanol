@@ -10,5 +10,9 @@
     <string name="txtListar">LISTAR</string>
     <string name="txtTituloRecycler">Valores Salvos</string>
     <string name="txtClose">Close</string>
-    <string name="txtLista">Lista de Dados</string>
+    <string name="txtList">Item List</string>
+    <string name="txtSettings">Settings</string>
+    <string name="txtAbout">About the app</string>
+    <string name="txtSair">Sair</string>
+    <string name="descLogo">Logo do App</string>
 </resources>
