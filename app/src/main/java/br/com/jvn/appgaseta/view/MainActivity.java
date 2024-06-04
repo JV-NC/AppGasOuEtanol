@@ -19,7 +19,6 @@ import android.widget.Toast;
 import com.google.android.material.bottomappbar.BottomAppBar;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 
 import br.com.jvn.appgaseta.R;
@@ -51,8 +50,7 @@ public class MainActivity extends AppCompatActivity {
         db = new GasEtaDB(MainActivity.this);
         controller = new ControllerCombustivel();
 
-        //controller.alterar(new Combustivel(4,"Etanol",3.42,"Abastecer com Etanol")); //tst Alterar
-        //controller.deletar(4); //tst Deletar
+        //TODO: Testar uptade e delete
         ArrayList<Combustivel> list = controller.getListaDados(db); //tst getLista
         for(int i=0;i<list.size();i++){
             Log.i("Banco de Dados",list.get(i).toString());
