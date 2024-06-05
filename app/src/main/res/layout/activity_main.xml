@@ -11,7 +11,7 @@
         android:id="@+id/toolbarMain"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/purple"
+        android:background="@color/lavender"
         app:title="@string/Titulo"
         app:titleMarginStart="30dp"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
@@ -67,7 +67,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:backgroundTint="@color/purple"
+        android:backgroundTint="@color/lavender"
         android:textColor="@color/white"
         android:layout_marginTop="32dp"
         android:layout_marginStart="16dp"
@@ -85,9 +85,11 @@
         android:textSize="24sp"
         android:textStyle="bold" />
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="bottom">
 
 
         <com.google.android.material.bottomappbar.BottomAppBar
@@ -95,10 +97,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:menu="@menu/bottom_main_menu"
-            android:backgroundTint="@color/purple"
+            android:backgroundTint="@color/lavender"
             android:theme="@style/Theme.MaterialComponents.Light.DarkActionBar"
-            android:layout_alignParentBottom="true"
             tools:ignore="BottomAppBar" />
-    </RelativeLayout>
+    </LinearLayout>
 
 </LinearLayout>
