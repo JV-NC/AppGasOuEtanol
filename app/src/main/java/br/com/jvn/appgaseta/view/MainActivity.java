@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -50,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
         db = new GasEtaDB(MainActivity.this);
         controller = new ControllerCombustivel();
 
-        //TODO: Testar uptade e delete
+        //TODO: Testar update e delete
         ArrayList<Combustivel> list = controller.getListaDados(db); //tst getLista
         for(int i=0;i<list.size();i++){
             Log.i("Banco de Dados",list.get(i).toString());
@@ -139,6 +141,12 @@ public class MainActivity extends AppCompatActivity {
         return verify;
     }
 
+    private void cleanTextFields(){
+        tfValorGas.setText("");
+        tfValorEta.setText("");
+        lblResultado.setText("");
+    }
+
     private void calcular(){
         if(checkTextFields()){
             recomendacao = UtilGasEta.calcularMelhorOpcao(Double.parseDouble(tfValorGas.getText().toString()),Double.parseDouble(tfValorEta.getText().toString()),UtilGasEta.PADRAO_70);
@@ -158,13 +166,36 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void limpar(){
-        tfValorGas.setText("");
-        tfValorEta.setText("");
-        lblResultado.setText("");
+        if(controller.count(db)>0){
+            AlertDialog alerta;
+            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+            builder.setCancelable(true);
+            builder.setTitle("Atenção!");
+            builder.setMessage("Você está prestes a deletar todos os registros. Deseja continuar?");
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    cleanTextFields();
 
-        controller.limpar(db);
+                    controller.limpar(db);
 
-        canSave = false;
+                    canSave = false;
+
+                    Toast.makeText(MainActivity.this, "Registros deletados com sucesso!", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                }
+            });
+
+            alerta = builder.create();
+            alerta.show();
+        } else{
+            Toast.makeText(MainActivity.this, "Registros vazios!", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void salvar(){
@@ -179,6 +210,7 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(MainActivity.this,"Valores Salvos com Sucesso!",Toast.LENGTH_SHORT).show();
             canSave = false;
 
+            cleanTextFields();
         }
     }
 

@@ -88,4 +88,13 @@ public class ControllerCombustivel{
 
         db.runSQL(sql);
     }
+
+    public int count(GasEtaDB db){
+        String sql = "SELECT * FROM Combustivel";
+        Cursor cursor = db.abreRAWSQL(sql);
+
+        int count = cursor.getCount();
+        cursor.close();
+        return count;
+    }
 }
