@@ -3,6 +3,7 @@ package br.com.jvn.appgaseta.view;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -18,6 +20,8 @@ import java.util.ArrayList;
 
 import br.com.jvn.appgaseta.R;
 import br.com.jvn.appgaseta.controller.ControllerCombustivel;
+import br.com.jvn.appgaseta.database.GasEtaDB;
+import br.com.jvn.appgaseta.interfaces.CombustivelAdpterListener;
 import br.com.jvn.appgaseta.model.Combustivel;
 import br.com.jvn.appgaseta.model.CombustivelAdapter;
 
@@ -41,9 +45,17 @@ public class RecyclerActivity extends AppCompatActivity {
 
         rv = findViewById(R.id.recyclerGasEta);
 
-        combustivelAdapter = new CombustivelAdapter(list);
+        combustivelAdapter = new CombustivelAdapter(list, new CombustivelAdpterListener() {
+            @Override
+            public void onItemClick(int position) { // ao clickar no item
+                Toast.makeText(RecyclerActivity.this, String.valueOf(list.get(position).getId()), Toast.LENGTH_SHORT).show();
+            }
+        });
 
         rv.setAdapter(combustivelAdapter);
+
+        ItemTouchHelper helper = new ItemTouchHelper(new ItemTouchHandler(0,ItemTouchHelper.LEFT));
+        helper.attachToRecyclerView(rv);
     }
 
     @Override
@@ -60,5 +72,28 @@ public class RecyclerActivity extends AppCompatActivity {
             finish();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private class ItemTouchHandler extends ItemTouchHelper.SimpleCallback{
+
+        public ItemTouchHandler(int dragDirs, int swipeDirs) {
+            super(dragDirs, swipeDirs);
+        }
+
+        @Override
+        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+            return false;
+        }
+
+        @Override
+        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+            int id= combustivelAdapter.removeCombustivel(viewHolder.getAdapterPosition());
+            combustivelAdapter.notifyItemRemoved(viewHolder.getAdapterPosition());
+            if(id!=-1){
+                ControllerCombustivel controller = new ControllerCombustivel();
+                GasEtaDB db = new GasEtaDB(RecyclerActivity.this);
+                controller.deletar(id,db);
+            }
+        }
     }
 }
