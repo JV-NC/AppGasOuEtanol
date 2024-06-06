@@ -52,7 +52,6 @@ public class MainActivity extends AppCompatActivity {
         db = new GasEtaDB(MainActivity.this);
         controller = new ControllerCombustivel();
 
-        //TODO: Testar update e delete
         ArrayList<Combustivel> list = controller.getListaDados(db); //tst getLista
         for(int i=0;i<list.size();i++){
             Log.i("Banco de Dados",list.get(i).toString());
@@ -185,11 +184,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
-            builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                }
-            });
+            builder.setNegativeButton("Cancelar", null);
 
             alerta = builder.create();
             alerta.show();

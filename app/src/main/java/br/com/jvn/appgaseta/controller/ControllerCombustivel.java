@@ -5,12 +5,8 @@ import android.database.Cursor;
 import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.Date;
-
-import br.com.jvn.appgaseta.apoio.UtilGasEta;
 import br.com.jvn.appgaseta.database.GasEtaDB;
 import br.com.jvn.appgaseta.model.Combustivel;
-import br.com.jvn.appgaseta.view.MainActivity;
 
 public class ControllerCombustivel{
 
@@ -73,14 +69,14 @@ public class ControllerCombustivel{
         dados.put("razao",combustivel.getRazao());
         dados.put("date",combustivel.getDate());
 
-        String sql = "UPDATE Combustivel" +
+        String sql = "UPDATE Combustivel " +
                 "SET nomeCombustivel = '"+ combustivel.getNome() + "', " +
                 "precoCombustivel = '"+ combustivel.getPreco() +"', "+
                 "razao = '"+ combustivel.getRazao() +"', " +
                 "date = '"+ combustivel.getDate() +"' "+
                 "WHERE id = '"+combustivel.getId()+"'";
 
-        db.abreRAWSQL(sql);
+        db.runSQL(sql);
     }
 
     public void deletar(int id, GasEtaDB db){
