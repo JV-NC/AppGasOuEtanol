@@ -60,6 +60,22 @@ public class ControllerCombustivel{
         return list;
     }
 
+    public Combustivel getItem(int id, GasEtaDB db){
+        Combustivel combustivel = new Combustivel();
+
+        String sql = "SELECT FROM Combustivel WHERE id = '"+id+"'";
+
+        Cursor cursor = db.abreRAWSQL(sql);
+
+        combustivel.setId(cursor.getInt(cursor.getColumnIndexOrThrow("id")));
+        combustivel.setNome(cursor.getString(cursor.getColumnIndexOrThrow("nomeCombustivel")));
+        combustivel.setPreco(cursor.getDouble(cursor.getColumnIndexOrThrow("precoCombustivel")));
+        combustivel.setRazao(cursor.getDouble(cursor.getColumnIndexOrThrow("razao")));
+        combustivel.setDate(cursor.getString(cursor.getColumnIndexOrThrow("date")));
+
+        return combustivel;
+    }
+
     public void alterar(Combustivel combustivel, GasEtaDB db){
         ContentValues dados = new ContentValues();
 

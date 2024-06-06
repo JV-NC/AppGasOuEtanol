@@ -6,6 +6,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -48,7 +49,10 @@ public class RecyclerActivity extends AppCompatActivity {
         combustivelAdapter = new CombustivelAdapter(list, new CombustivelAdpterListener() {
             @Override
             public void onItemClick(int position) { // ao clickar no item
-                Toast.makeText(RecyclerActivity.this, String.valueOf(list.get(position).getId()), Toast.LENGTH_SHORT).show();
+                Intent it = new Intent(RecyclerActivity.this,UpdateActivity.class);
+                it.putExtra("Combustivel",combustivelAdapter.getCombustiveis().get(position));
+                startActivity(it);
+                finish();
             }
         });
 
@@ -93,6 +97,12 @@ public class RecyclerActivity extends AppCompatActivity {
                 ControllerCombustivel controller = new ControllerCombustivel();
                 GasEtaDB db = new GasEtaDB(RecyclerActivity.this);
                 controller.deletar(id,db);
+
+                id = combustivelAdapter.removeCombustivel(viewHolder.getAdapterPosition()+1);
+                combustivelAdapter.notifyItemRemoved(viewHolder.getAdapterPosition()+1);
+                if(id!=1){
+                    controller.deletar(id,db);
+                }
             }
         }
     }

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.UpdateActivity"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/tfId"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/padrao_edittext"
+                android:backgroundTint="@color/lavender"
+                android:hint="@string/hintId"
+                android:textAlignment="center"
+                android:inputType="number"
+                android:enabled="false"
+                android:autofillHints=""/>
+
+            <EditText
+                android:id="@+id/tfNome"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/padrao_edittext"
+                android:backgroundTint="@color/lavender"
+                android:hint="@string/hintNome"
+                android:textAlignment="center"
+                android:inputType="text"
+                android:selectAllOnFocus="true"
+                android:autofillHints=""/>
+
+            <EditText
+                android:id="@+id/tfPreco"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/padrao_edittext"
+                android:backgroundTint="@color/lavender"
+                android:hint="@string/hintPreco"
+                android:textAlignment="center"
+                android:inputType="numberDecimal"
+                android:selectAllOnFocus="true"
+                android:autofillHints=""/>
+
+            <EditText
+                android:id="@+id/tfRazao"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/padrao_edittext"
+                android:backgroundTint="@color/lavender"
+                android:hint="@string/hintRazao"
+                android:textAlignment="center"
+                android:inputType="numberDecimal"
+                android:selectAllOnFocus="true"
+                android:autofillHints=""/>
+
+            <EditText
+                android:id="@+id/tfDate"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/padrao_edittext"
+                android:backgroundTint="@color/lavender"
+                android:hint="@string/hintDate"
+                android:textAlignment="center"
+                android:inputType="datetime"
+                android:selectAllOnFocus="true"
+                android:enabled="false"
+                android:autofillHints=""/>
+
+            <Button
+                android:id="@+id/btnAtualizar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:text="@string/txtAtualizar"
+                android:backgroundTint="@color/lavender"/>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

@@ -31,6 +31,10 @@ public class CombustivelAdapter extends RecyclerView.Adapter<CombustivelAdapter.
         this.listener = listener;
     }
 
+    public ArrayList<Combustivel> getCombustiveis() {
+        return combustiveis;
+    }
+
     public int removeCombustivel(int position){
         int id = -1;
         if(position>=0){

@@ -19,4 +19,10 @@
     <string name="txtAuthor">João Vitor Neves Costa</string>
     <string name="txtEmail">joaovnevescosta@hotmail.com</string>
     <string name="txtDedicatoria">Dedicated to Anderson Silva</string>
+    <string name="hintId">Id</string>
+    <string name="hintNome">Nome</string>
+    <string name="hintPreco">Preço</string>
+    <string name="hintRazao">Razao</string>
+    <string name="hintDate">Data</string>
+    <string name="txtAtualizar">Atualizar</string>
 </resources>
