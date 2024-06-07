@@ -36,10 +36,14 @@ public class RecyclerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.recycler_activity);
 
-        list = getIntent().getParcelableArrayListExtra("Lista");
+        ControllerCombustivel controller = new ControllerCombustivel();
+        GasEtaDB db = new GasEtaDB(RecyclerActivity.this);
+        ArrayList<Combustivel> list = controller.getListaDados(db);
+
         if(list.size()==0){
             Log.e("List Parse","Lista Vazia");
         }
+
         toolbar = findViewById(R.id.toolbarList);
         setSupportActionBar(toolbar);
 
@@ -51,6 +55,16 @@ public class RecyclerActivity extends AppCompatActivity {
             public void onItemClick(int position) { // ao clickar no item
                 Intent it = new Intent(RecyclerActivity.this,UpdateActivity.class);
                 it.putExtra("Combustivel",combustivelAdapter.getCombustiveis().get(position));
+
+                int aux;
+                if(combustivelAdapter.getCombustiveis().get(position).getId()%2==0){
+                    aux=position-1;
+                }
+                else{
+                    aux=position+1;
+                }
+                it.putExtra("CombustivelAux",combustivelAdapter.getCombustiveis().get(aux));
+
                 startActivity(it);
                 finish();
             }

@@ -210,13 +210,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void listar(){
-        ArrayList<Combustivel> list = controller.getListaDados(db);
-        for(int i=0;i<list.size();i++){
-            Log.i("Banco de Dados",list.get(i).toString());
-
-        }
         Intent it = new Intent(MainActivity.this,RecyclerActivity.class);
-        it.putExtra("Lista",list);
         startActivity(it);
     }
 }

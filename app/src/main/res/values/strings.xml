@@ -25,4 +25,5 @@
     <string name="hintRazao">Razao</string>
     <string name="hintDate">Data</string>
     <string name="txtAtualizar">Atualizar</string>
+    <string name="txtAlterar">Alterar Item</string>
 </resources>

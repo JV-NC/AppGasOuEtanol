@@ -7,6 +7,16 @@
     tools:context=".view.UpdateActivity"
     android:orientation="vertical">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbarUpdate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/lavender"
+        app:title="@string/txtAlterar"
+        app:titleMarginStart="18dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -74,6 +84,7 @@
                 android:textAlignment="center"
                 android:inputType="numberDecimal"
                 android:selectAllOnFocus="true"
+                android:enabled="false"
                 android:autofillHints=""/>
 
             <EditText
