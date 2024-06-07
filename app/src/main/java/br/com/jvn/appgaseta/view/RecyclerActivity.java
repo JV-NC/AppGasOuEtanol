@@ -28,7 +28,8 @@ import br.com.jvn.appgaseta.model.CombustivelAdapter;
 
 public class RecyclerActivity extends AppCompatActivity {
     Toolbar toolbar;
-    ArrayList<Combustivel> list;
+    ControllerCombustivel controller;
+    GasEtaDB db;
     RecyclerView rv;
     CombustivelAdapter combustivelAdapter;
     @Override
@@ -36,12 +37,12 @@ public class RecyclerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.recycler_activity);
 
-        ControllerCombustivel controller = new ControllerCombustivel();
-        GasEtaDB db = new GasEtaDB(RecyclerActivity.this);
+        controller = new ControllerCombustivel();
+        db = new GasEtaDB(RecyclerActivity.this);
         ArrayList<Combustivel> list = controller.getListaDados(db);
 
         if(list.size()==0){
-            Log.e("List Parse","Lista Vazia");
+            Log.e("List DB","Lista Vazia");
         }
 
         toolbar = findViewById(R.id.toolbarList);
@@ -105,16 +106,23 @@ public class RecyclerActivity extends AppCompatActivity {
 
         @Override
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-            int id= combustivelAdapter.removeCombustivel(viewHolder.getAdapterPosition());
-            combustivelAdapter.notifyItemRemoved(viewHolder.getAdapterPosition());
+            int pos = viewHolder.getAdapterPosition();
+            int id = combustivelAdapter.removeCombustivel(pos);
+            combustivelAdapter.notifyItemRemoved(pos);
             if(id!=-1){
-                ControllerCombustivel controller = new ControllerCombustivel();
-                GasEtaDB db = new GasEtaDB(RecyclerActivity.this);
                 controller.deletar(id,db);
 
-                id = combustivelAdapter.removeCombustivel(viewHolder.getAdapterPosition()+1);
-                combustivelAdapter.notifyItemRemoved(viewHolder.getAdapterPosition()+1);
-                if(id!=1){
+                int aux;
+                if(id%2==0){
+                    aux = pos-1;
+                }
+                else {
+                    aux = pos;
+                }
+
+                id = combustivelAdapter.removeCombustivel(aux);
+                combustivelAdapter.notifyItemRemoved(aux);
+                if(id!=-1){
                     controller.deletar(id,db);
                 }
             }
