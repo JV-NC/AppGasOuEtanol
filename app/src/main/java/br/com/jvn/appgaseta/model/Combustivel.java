@@ -5,10 +5,6 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 public class Combustivel implements Parcelable {
     private int id;
     private String nome;

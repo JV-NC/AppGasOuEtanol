@@ -2,7 +2,9 @@ package br.com.jvn.appgaseta.apoio;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.util.Log;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -41,5 +43,21 @@ public class UtilGasEta {
 
     public static double calcularRazao(double v1, double v2){
         return v1/v2;
+    }
+
+    public static String reformatarData(String origin, String target, String date) {
+        SimpleDateFormat sdfOrigin = new SimpleDateFormat(origin);
+        SimpleDateFormat sdfTarget = new SimpleDateFormat(target);
+
+        Date data = null;
+        try {
+            data = sdfOrigin.parse(date);
+            if (data != null) {
+                return sdfTarget.format(data);
+            }
+        } catch (ParseException e) {
+            Log.e("reformatarData", "Erro ao transformar a data: " + date);
+        }
+        return null;
     }
 }

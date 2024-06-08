@@ -15,8 +15,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-
 import br.com.jvn.appgaseta.R;
 import br.com.jvn.appgaseta.apoio.UtilGasEta;
 import br.com.jvn.appgaseta.controller.ControllerCombustivel;
@@ -66,7 +64,6 @@ public class UpdateActivity extends AppCompatActivity {
                     callRecycler();
                     //TODO:Aprender usar nova versão de startActivityforResult
                     //TODO:Disable nome
-                    //TODO:OnDestroy
 
                     finish();
                 }

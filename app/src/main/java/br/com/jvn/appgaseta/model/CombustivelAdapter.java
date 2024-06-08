@@ -14,9 +14,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 import br.com.jvn.appgaseta.R;
 import br.com.jvn.appgaseta.apoio.UtilGasEta;
@@ -98,7 +96,8 @@ public class CombustivelAdapter extends RecyclerView.Adapter<CombustivelAdapter.
             lblNome.setText(combustivel.getNome());
             lblPreco.setText("R$ "+df.format(combustivel.getPreco()));
             lblRazao.setText(df.format(combustivel.getRazao()*100)+"%");
-            lblDate.setText(combustivel.getDate());
+            //formato da data
+            lblDate.setText(UtilGasEta.reformatarData("yyyy/MM/dd HH:mm:ss","dd/MM/yyyy HH:mm:ss",combustivel.getDate()));
         }
     }
 
