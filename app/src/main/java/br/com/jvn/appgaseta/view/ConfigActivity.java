@@ -8,6 +8,7 @@ import androidx.appcompat.widget.Toolbar;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,17 +20,19 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import br.com.jvn.appgaseta.R;
+import br.com.jvn.appgaseta.controller.ConfigController;
 import br.com.jvn.appgaseta.controller.ControllerCombustivel;
 import br.com.jvn.appgaseta.database.GasEtaDB;
 
 public class ConfigActivity extends AppCompatActivity {
     ControllerCombustivel controller;
     GasEtaDB db;
+    ConfigController config;
 
     Toolbar toolbar;
     Spinner spinnerOrder;
     CheckBox cbTheme;
-    Button btnDelete, btnSalvar;
+    Button btnDelete, btnSalvar, btnStandard;
 
     boolean isDark;
     @Override
@@ -39,28 +42,33 @@ public class ConfigActivity extends AppCompatActivity {
         
         controller = new ControllerCombustivel();
         db = new GasEtaDB(ConfigActivity.this);
+        config = new ConfigController(ConfigActivity.this);
 
         setLayout();
 
-        isDark = AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES;
-        cbTheme.setChecked(isDark);
+        spinnerOrder.setSelection(config.getOrder());
 
-        cbTheme.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() { //toggle modo escuro
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                }
-                else {
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                }
-            }
-        });
+        isDark = config.getDark();
+        /*if(isDark){
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        }
+        else{
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }*/
+        cbTheme.setChecked(isDark);
 
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 deletar();
+            }
+        });
+
+        btnStandard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                config.limpar();
+                //TODO: Redefinir para as configurações padrão e verificar com AlertDialog
             }
         });
         
@@ -83,23 +91,28 @@ public class ConfigActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if(id == R.id.itemRecyclerClose){
-            AlertDialog alerta;
-            AlertDialog.Builder builder = new AlertDialog.Builder(ConfigActivity.this);
-            builder.setCancelable(true);
-            builder.setTitle("Atenção!");
-            builder.setMessage("As alterações feitas serão perdidas, deseja continuar?");
-            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    //TODO:Cancelar alterações
-                    finish();
-                }
-            });
+            if(config.getOrder()!=spinnerOrder.getSelectedItemPosition() || config.getDark()!=cbTheme.isChecked()){
+                AlertDialog alerta;
+                AlertDialog.Builder builder = new AlertDialog.Builder(ConfigActivity.this);
+                builder.setCancelable(true);
+                builder.setTitle("Atenção!");
+                builder.setMessage("As alterações feitas serão perdidas, deseja continuar?");
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //Alterações são descartadas
+                        finish();
+                    }
+                });
 
-            builder.setNegativeButton("Cancelar", null);
+                builder.setNegativeButton("Cancelar", null);
 
-            alerta = builder.create();
-            alerta.show();
+                alerta = builder.create();
+                alerta.show();
+            }
+            else {
+                finish();
+            }
         }
         return true;
     }
@@ -116,6 +129,7 @@ public class ConfigActivity extends AppCompatActivity {
 
         cbTheme = findViewById(R.id.cbTheme);
         btnDelete = findViewById(R.id.btnDelete);
+        btnStandard = findViewById(R.id.btnStandard);
         btnSalvar = findViewById(R.id.btnSalvar);
     }
 
@@ -148,7 +162,16 @@ public class ConfigActivity extends AppCompatActivity {
         int position = spinnerOrder.getSelectedItemPosition();
         boolean isDarkNovo = cbTheme.isChecked();
 
-        Toast.makeText(ConfigActivity.this, spinnerOrder.getItemAtPosition(position).toString()+", DarkMode: "+isDarkNovo, Toast.LENGTH_SHORT).show();
+        config.salvar(position,isDarkNovo);
+
+        if(isDarkNovo){
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        }
+        else{
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
+
+        Log.i("SharedPreferences", config.getOrder() + ", DarkMode: " + config.getDark());
         //TODO: Salvar em shared preferences e acessar nas activities
         finish();
     }

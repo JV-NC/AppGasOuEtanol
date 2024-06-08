@@ -58,6 +58,16 @@
         android:layout_marginEnd="16dp"/>
 
     <Button
+        android:id="@+id/btnStandard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/txtRedefinirConfig"
+        android:backgroundTint="@color/lavender"
+        android:layout_marginTop="32dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"/>
+
+    <Button
         android:id="@+id/btnSalvar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

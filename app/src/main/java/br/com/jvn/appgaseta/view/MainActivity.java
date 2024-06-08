@@ -2,6 +2,7 @@ package br.com.jvn.appgaseta.view;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 
 import android.app.AlertDialog;
@@ -25,11 +26,13 @@ import java.util.Date;
 
 import br.com.jvn.appgaseta.R;
 import br.com.jvn.appgaseta.apoio.UtilGasEta;
+import br.com.jvn.appgaseta.controller.ConfigController;
 import br.com.jvn.appgaseta.controller.ControllerCombustivel;
 import br.com.jvn.appgaseta.database.GasEtaDB;
 import br.com.jvn.appgaseta.model.Combustivel;
 
 public class MainActivity extends AppCompatActivity {
+    ConfigController config;
     Toolbar toolbar;
     BottomAppBar bottomAppBar;
     EditText tfValorGas;
@@ -55,6 +58,14 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<Combustivel> list = controller.getListaDados(db); //tst getLista
         for(int i=0;i<list.size();i++){
             Log.i("Banco de Dados",list.get(i).toString());
+        }
+
+        config = new ConfigController(MainActivity.this); //Define o tema da aplicação
+        if(config.getDark()){
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        }
+        else{
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
 
         setLayout();
