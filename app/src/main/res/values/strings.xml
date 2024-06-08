@@ -26,4 +26,12 @@
     <string name="hintDate">Data</string>
     <string name="txtAtualizar">Atualizar</string>
     <string name="txtAlterar">Alterar Item</string>
+    <string name="txtOrdenar">Método de Ordenação dos Registros:</string>
+    <string name="txtDarkTheme">Tema Escuro</string>
+    <string name="txtDeletarReg">DELETAR TODOS OS REGISTROS SALVOS</string>
+
+<string-array name="Ordenacao">
+    <item>Data</item>
+    <item>Razão</item>
+</string-array>
 </resources>

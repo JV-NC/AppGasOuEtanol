@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if(id == R.id.itemSettings){
-            Toast.makeText(MainActivity.this,"Ir para Settings",Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(MainActivity.this,ConfigActivity.class));
         } else if(id == R.id.itemAbout) {
             startActivity(new Intent(MainActivity.this,AboutActivity.class));
 

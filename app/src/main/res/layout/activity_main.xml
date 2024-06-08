@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:background="@color/lavender"
         app:title="@string/Titulo"
-        app:titleMarginStart="30dp"
+        app:titleMarginStart="18dp"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:popupTheme="@style/Theme.MaterialComponents.Light.DarkActionBar"/>
 
