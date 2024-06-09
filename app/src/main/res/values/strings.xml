@@ -9,4 +9,30 @@
     <string name="txtLimpar">LIMPAR</string>
     <string name="txtListar">LISTAR</string>
     <string name="txtTituloRecycler">Valores Salvos</string>
+    <string name="txtClose">Close</string>
+    <string name="txtList">Lista de Itens</string>
+    <string name="txtSettings">Configurações</string>
+    <string name="txtAbout">Sobre o aplicativo</string>
+    <string name="txtSair">Sair</string>
+    <string name="descLogo">Logo do App</string>
+    <string name="txtGit">Developed by www.github.com/JV-NC</string>
+    <string name="txtAuthor">João Vitor Neves Costa</string>
+    <string name="txtEmail">joaovnevescosta@hotmail.com</string>
+    <string name="txtDedicatoria">Dedicated to Anderson Silva</string>
+    <string name="hintId">Id</string>
+    <string name="hintNome">Nome</string>
+    <string name="hintPreco">Preço</string>
+    <string name="hintRazao">Razao</string>
+    <string name="hintDate">Data</string>
+    <string name="txtAtualizar">Atualizar</string>
+    <string name="txtAlterar">Alterar Item</string>
+    <string name="txtOrdenar">Método de Ordenação dos Registros:</string>
+    <string name="txtDarkTheme">Tema Escuro</string>
+    <string name="txtDeletarReg">DELETAR TODOS OS REGISTROS SALVOS</string>
+    <string name="txtRedefinirConfig">REDEFINIR CONFIGURAÇÕES PADRÃO</string>
+
+<string-array name="Ordenacao">
+    <item>Data</item>
+    <item>Razão</item>
+</string-array>
 </resources>

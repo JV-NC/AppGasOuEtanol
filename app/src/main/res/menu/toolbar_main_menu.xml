@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/itemSettings"
+        android:title="@string/txtSettings"/>
+
+    <item android:id="@+id/itemAbout"
+        android:title="@string/txtAbout"/>
+
+    <item android:id="@+id/itemExit"
+        android:title="@string/txtSair"/>
+</menu>
