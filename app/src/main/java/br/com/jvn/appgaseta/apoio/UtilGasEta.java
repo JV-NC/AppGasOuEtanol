@@ -11,7 +11,7 @@ import java.util.Date;
 
 public class UtilGasEta {
     public static final double PADRAO_70 = 0.7;
-    public static String calcularMelhorOpcao(double gasolina, double etanol,double razao){
+    public static String calcularMelhorOpcao(double gasolina, double etanol,double razao){ //utiliza uma razão para retornar melhor opção
         //preço ideal = gasolina * razao
 
         double precoIdeal = gasolina*razao;
@@ -31,7 +31,7 @@ public class UtilGasEta {
         return sdf.format(cal.getTime());
     }
 
-    public static void ShowMessage(Context context, String titulo, String mensagem){
+    public static void ShowMessage(Context context, String titulo, String mensagem){ //Mostra mensagem com alert dialog
         AlertDialog alerta;
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(titulo);
@@ -45,7 +45,7 @@ public class UtilGasEta {
         return v1/v2;
     }
 
-    public static String reformatarData(String origin, String target, String date) {
+    public static String reformatarData(String origin, String target, String date) { //passa uma data em string de um formato para outro
         SimpleDateFormat sdfOrigin = new SimpleDateFormat(origin);
         SimpleDateFormat sdfTarget = new SimpleDateFormat(target);
 

@@ -21,13 +21,6 @@ public class Combustivel implements Parcelable {
         setRazao(razao);
     }
 
-    public Combustivel(int id, String nome, double preco, double razao) {
-        setId(id);
-        setNome(nome);
-        setPreco(preco);
-        setRazao(razao);
-    }
-
     protected Combustivel(Parcel in) {
         id = in.readInt();
         nome = in.readString();
@@ -87,11 +80,6 @@ public class Combustivel implements Parcelable {
     public void setDate(String date) {
         this.date = date;
     }
-
-    /*public void setDate(String date) throws ParseException {
-        SimpleDateFormat df = new SimpleDateFormat("EEE MMM dd hh:mm:ss zzz yyyy");
-        this.date = df.parse(date);
-    }*/
 
     @NonNull
     @Override

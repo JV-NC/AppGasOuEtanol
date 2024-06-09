@@ -8,13 +8,13 @@ public class ConfigController {
     SharedPreferences preferences;
     SharedPreferences.Editor editor;
     public static final String NOME_PREFERENCES = "pref_config";
-    public ConfigController(Context context){
+    public ConfigController(Context context){ //cria/acessa SharedPreferences
         Log.i("Config Controller","Controladora Iniciada!");
         preferences = context.getSharedPreferences(NOME_PREFERENCES,0);
         editor =preferences.edit();
     }
 
-    public void salvar(int order, boolean isDark){
+    public void salvar(int order, boolean isDark){ //salva forma de ordenação e Tema Escuro
         editor.putInt("order",order);
         editor.putBoolean("isDark",isDark);
         editor.apply();
@@ -28,7 +28,7 @@ public class ConfigController {
         return preferences.getBoolean("isDark",false);
     }
 
-    public void limpar(){
+    public void limpar(){ //limpa SP
         editor.clear();
         editor.apply();
     }
