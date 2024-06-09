@@ -15,6 +15,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.text.DecimalFormat;
+
 import br.com.jvn.appgaseta.R;
 import br.com.jvn.appgaseta.apoio.UtilGasEta;
 import br.com.jvn.appgaseta.controller.ControllerCombustivel;
@@ -46,30 +48,7 @@ public class UpdateActivity extends AppCompatActivity {
         btnAtualizar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (verifyTextFields()){
-                    combustivel.setNome(tfNome.getText().toString());
-                    combustivel.setPreco(Double.parseDouble(tfPreco.getText().toString()));
-
-                    double razao = calculaRazao(combustivel,aux);
-
-                    combustivel.setRazao(razao);
-                    aux.setRazao(razao);
-
-                    ControllerCombustivel controller = new ControllerCombustivel();
-                    GasEtaDB db = new GasEtaDB(UpdateActivity.this);
-                    
-                    controller.alterar(combustivel,db);
-                    controller.alterar(aux,db);
-
-                    callRecycler();
-                    //TODO:Aprender usar nova versão de startActivityforResult
-                    //TODO:Disable nome
-
-                    finish();
-                }
-                else {
-                    Toast.makeText(UpdateActivity.this, "Por favor, verifique os campos!", Toast.LENGTH_SHORT).show();
-                }
+                atualizar(combustivel,aux);
             }
         });
     }
@@ -104,10 +83,12 @@ public class UpdateActivity extends AppCompatActivity {
 
         btnAtualizar = findViewById(R.id.btnAtualizar);
 
+        DecimalFormat df = new DecimalFormat("#0.00"); //formatar valores com decimais
+
         tfId.setText(String.valueOf(combustivel.getId()));
         tfNome.setText(combustivel.getNome());
-        tfPreco.setText(String.valueOf(combustivel.getPreco()));
-        tfRazao.setText(String.valueOf(combustivel.getRazao()));
+        tfPreco.setText(df.format(combustivel.getPreco()));
+        tfRazao.setText(df.format(combustivel.getRazao()));
         tfDate.setText(combustivel.getDate());
     }
 
@@ -136,5 +117,30 @@ public class UpdateActivity extends AppCompatActivity {
     private void callRecycler(){
         Intent it = new Intent(UpdateActivity.this,RecyclerActivity.class);;
         startActivity(it);
+    }
+
+    private void atualizar(Combustivel combustivel, Combustivel aux){
+        if (verifyTextFields()){
+            //combustivel.setNome(tfNome.getText().toString());
+            combustivel.setPreco(Double.parseDouble(tfPreco.getText().toString()));
+
+            double razao = calculaRazao(combustivel,aux);
+
+            combustivel.setRazao(razao);
+            aux.setRazao(razao);
+
+            ControllerCombustivel controller = new ControllerCombustivel();
+            GasEtaDB db = new GasEtaDB(UpdateActivity.this);
+
+            controller.alterar(combustivel,db);
+            controller.alterar(aux,db);
+
+            callRecycler();
+
+            finish();
+        }
+        else {
+            Toast.makeText(UpdateActivity.this, "Por favor, verifique os campos!", Toast.LENGTH_SHORT).show();
+        }
     }
 }

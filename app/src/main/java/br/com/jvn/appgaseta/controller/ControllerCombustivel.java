@@ -33,11 +33,11 @@ public class ControllerCombustivel{
         db.runSQL("DELETE FROM Combustivel");
     }
 
-    public ArrayList<Combustivel> getListaDados(GasEtaDB db){
+    public ArrayList<Combustivel> getListaDados(GasEtaDB db,String order){
         ArrayList<Combustivel> list = new ArrayList<>();
 
         Combustivel registro;
-        String sql  = "SELECT * FROM Combustivel order by id";
+        String sql  = "SELECT * FROM Combustivel order by "+order;
 
         Cursor cursor = db.abreRAWSQL(sql);
 

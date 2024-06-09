@@ -49,12 +49,6 @@ public class ConfigActivity extends AppCompatActivity {
         spinnerOrder.setSelection(config.getOrder());
 
         isDark = config.getDark();
-        /*if(isDark){
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-        }
-        else{
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-        }*/
         cbTheme.setChecked(isDark);
 
         btnDelete.setOnClickListener(new View.OnClickListener() {
@@ -64,15 +58,14 @@ public class ConfigActivity extends AppCompatActivity {
             }
         });
 
-        btnStandard.setOnClickListener(new View.OnClickListener() {
+        btnStandard.setOnClickListener(new View.OnClickListener() { //reset configurações
             @Override
             public void onClick(View v) {
-                config.limpar();
-                //TODO: Redefinir para as configurações padrão e verificar com AlertDialog
+                resetConfig();
             }
         });
         
-        btnSalvar.setOnClickListener(new View.OnClickListener() {
+        btnSalvar.setOnClickListener(new View.OnClickListener() { //salvar configurações
             @Override
             public void onClick(View v) {
                 salvar();
@@ -90,29 +83,8 @@ public class ConfigActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
 
-        if(id == R.id.itemRecyclerClose){
-            if(config.getOrder()!=spinnerOrder.getSelectedItemPosition() || config.getDark()!=cbTheme.isChecked()){
-                AlertDialog alerta;
-                AlertDialog.Builder builder = new AlertDialog.Builder(ConfigActivity.this);
-                builder.setCancelable(true);
-                builder.setTitle("Atenção!");
-                builder.setMessage("As alterações feitas serão perdidas, deseja continuar?");
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        //Alterações são descartadas
-                        finish();
-                    }
-                });
-
-                builder.setNegativeButton("Cancelar", null);
-
-                alerta = builder.create();
-                alerta.show();
-            }
-            else {
-                finish();
-            }
+        if(id == R.id.itemRecyclerClose){ //fechar Activity
+            close();
         }
         return true;
     }
@@ -131,6 +103,31 @@ public class ConfigActivity extends AppCompatActivity {
         btnDelete = findViewById(R.id.btnDelete);
         btnStandard = findViewById(R.id.btnStandard);
         btnSalvar = findViewById(R.id.btnSalvar);
+    }
+
+    private void close(){
+        if(config.getOrder()!=spinnerOrder.getSelectedItemPosition() || config.getDark()!=cbTheme.isChecked()){
+            AlertDialog alerta;
+            AlertDialog.Builder builder = new AlertDialog.Builder(ConfigActivity.this);
+            builder.setCancelable(true);
+            builder.setTitle("Atenção!");
+            builder.setMessage("As alterações feitas serão perdidas. Deseja continuar?");
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    //Alterações são descartadas
+                    finish();
+                }
+            });
+
+            builder.setNegativeButton("Cancelar", null);
+
+            alerta = builder.create();
+            alerta.show();
+        }
+        else {
+            finish();
+        }
     }
 
     private void deletar(){
@@ -172,7 +169,33 @@ public class ConfigActivity extends AppCompatActivity {
         }
 
         Log.i("SharedPreferences", config.getOrder() + ", DarkMode: " + config.getDark());
-        //TODO: Salvar em shared preferences e acessar nas activities
+        Toast.makeText(ConfigActivity.this, "Configurações salvas!", Toast.LENGTH_SHORT).show();
         finish();
+    }
+
+    private void standardConfig(){
+        config.limpar();
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        spinnerOrder.setSelection(0);
+        cbTheme.setChecked(false);
+    }
+
+    private void resetConfig(){
+        AlertDialog alerta;
+        AlertDialog.Builder builder = new AlertDialog.Builder(ConfigActivity.this);
+        builder.setCancelable(true);
+        builder.setTitle("Atenção!");
+        builder.setMessage("As configurações atuais serão substituidas. Deseja continuar?");
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                standardConfig();
+            }
+        });
+
+        builder.setNegativeButton("Cancelar", null);
+
+        alerta = builder.create();
+        alerta.show();
     }
 }

@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import java.util.ArrayList;
 
 import br.com.jvn.appgaseta.R;
+import br.com.jvn.appgaseta.controller.ConfigController;
 import br.com.jvn.appgaseta.controller.ControllerCombustivel;
 import br.com.jvn.appgaseta.database.GasEtaDB;
 import br.com.jvn.appgaseta.interfaces.CombustivelAdpterListener;
@@ -34,7 +35,16 @@ public class RecyclerActivity extends AppCompatActivity {
 
         controller = new ControllerCombustivel();
         db = new GasEtaDB(RecyclerActivity.this);
-        ArrayList<Combustivel> list = controller.getListaDados(db);
+        ConfigController config = new ConfigController(RecyclerActivity.this);
+        String order;
+        if(config.getOrder()==0){
+            order = "id";
+        }
+        else{
+            order = "razao DESC";
+        }
+
+        ArrayList<Combustivel> list = controller.getListaDados(db,order);
 
         if(list.size()==0){
             Log.e("List DB","Lista Vazia");

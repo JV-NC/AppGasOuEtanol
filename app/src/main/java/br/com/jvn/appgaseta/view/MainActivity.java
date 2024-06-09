@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
         db = new GasEtaDB(MainActivity.this);
         controller = new ControllerCombustivel();
 
-        ArrayList<Combustivel> list = controller.getListaDados(db); //tst getLista
+        ArrayList<Combustivel> list = controller.getListaDados(db,"id"); //tst getLista
         for(int i=0;i<list.size();i++){
             Log.i("Banco de Dados",list.get(i).toString());
         }
