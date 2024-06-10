@@ -30,9 +30,18 @@
     <string name="txtDarkTheme">Tema Escuro</string>
     <string name="txtDeletarReg">DELETAR TODOS OS REGISTROS SALVOS</string>
     <string name="txtRedefinirConfig">REDEFINIR CONFIGURAÇÕES PADRÃO</string>
+    <string name="txtRazaoConfig">Taxa de aproveitamento Etanol/Gasolina:</string>
+    <string name="txtPadrao">Padrao 70%</string>
+    <string name="txtCustom">Customizado:</string>
+    <string name="hintCustom">Ex (70) %</string>
 
 <string-array name="Ordenacao">
     <item>Data</item>
     <item>Razão</item>
+</string-array>
+
+<string-array name="Direcao">
+    <item>Crescente</item>
+    <item>Decrescente</item>
 </string-array>
 </resources>

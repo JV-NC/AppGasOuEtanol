@@ -41,7 +41,10 @@ public class RecyclerActivity extends AppCompatActivity {
             order = "id";
         }
         else{
-            order = "razao DESC";
+            order = "razao";
+        }
+        if(config.getDir()==1){
+            order+= " DESC";
         }
 
         ArrayList<Combustivel> list = controller.getListaDados(db,order);

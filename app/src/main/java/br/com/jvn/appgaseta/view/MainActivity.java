@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.google.android.material.bottomappbar.BottomAppBar;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -45,7 +46,6 @@ public class MainActivity extends AppCompatActivity {
     ControllerCombustivel controller;
     Combustivel Gas;
     Combustivel Eta;
-    String recomendacao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -159,13 +159,15 @@ public class MainActivity extends AppCompatActivity {
 
     private void calcular(){
         if(checkTextFields()){
-            recomendacao = UtilGasEta.calcularMelhorOpcao(Double.parseDouble(tfValorGas.getText().toString()),Double.parseDouble(tfValorEta.getText().toString()),UtilGasEta.PADRAO_70);
+            String recomendacao = UtilGasEta.calcularMelhorOpcao(Double.parseDouble(tfValorGas.getText().toString()),Double.parseDouble(tfValorEta.getText().toString()),config.getRazao());
+            Toast.makeText(this, recomendacao, Toast.LENGTH_SHORT).show();
             double razao = UtilGasEta.calcularRazao(Double.parseDouble(tfValorEta.getText().toString()),Double.parseDouble(tfValorGas.getText().toString()));
+            DecimalFormat df = new DecimalFormat("#0.00");
 
             Gas = new Combustivel("Gasolina",Double.parseDouble(tfValorGas.getText().toString()),razao);
             Eta = new Combustivel("Etanol",Double.parseDouble(tfValorEta.getText().toString()),razao);
 
-            lblResultado.setText(recomendacao);
+            lblResultado.setText(df.format(razao*100)+"%");
             canSave = true;
         }
         else{

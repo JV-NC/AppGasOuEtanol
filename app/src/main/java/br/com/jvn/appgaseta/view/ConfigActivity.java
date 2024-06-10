@@ -8,6 +8,7 @@ import androidx.appcompat.widget.Toolbar;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,8 +16,12 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
+
+import java.text.DecimalFormat;
 
 import br.com.jvn.appgaseta.R;
 import br.com.jvn.appgaseta.controller.ConfigController;
@@ -29,9 +34,11 @@ public class ConfigActivity extends AppCompatActivity {
     ConfigController config;
 
     Toolbar toolbar;
-    Spinner spinnerOrder;
+    Spinner spinnerOrder, spinnerDir;
     CheckBox cbTheme;
     Button btnDelete, btnSalvar, btnStandard;
+    RadioGroup rdgRazao;
+    EditText tfCustom;
 
     boolean isDark;
     @Override
@@ -45,10 +52,38 @@ public class ConfigActivity extends AppCompatActivity {
 
         setLayout();
 
+        if(config.getIsPadrao07()){
+            rdgRazao.check(R.id.rdbPadrao);
+        }
+        else{
+            rdgRazao.check(R.id.rdbCustom);
+            DecimalFormat df = new DecimalFormat("#0.00");
+            tfCustom.setText(df.format(config.getRazao()*100));
+            tfCustom.setEnabled(true);
+            tfCustom.setVisibility(EditText.VISIBLE);
+        }
+
         spinnerOrder.setSelection(config.getOrder());
+        spinnerDir.setSelection(config.getDir());
 
         isDark = config.getDark();
         cbTheme.setChecked(isDark);
+
+        rdgRazao.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                if(checkedId == R.id.rdbCustom){
+                    tfCustom.setEnabled(true);
+                    tfCustom.setVisibility(EditText.VISIBLE);
+                    tfCustom.requestFocus();
+                }
+                else{
+                    tfCustom.setEnabled(false);
+                    tfCustom.setVisibility(EditText.INVISIBLE);
+                    tfCustom.setText("");
+                }
+            }
+        });
 
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,7 +131,15 @@ public class ConfigActivity extends AppCompatActivity {
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(ConfigActivity.this,R.array.Ordenacao, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.select_dialog_singlechoice);
         spinnerOrder.setAdapter(adapter);
+
+        spinnerDir = findViewById(R.id.spinnerDir);
+        ArrayAdapter<CharSequence> adapterDir = ArrayAdapter.createFromResource(ConfigActivity.this, R.array.Direcao, android.R.layout.simple_spinner_item);
+        adapterDir.setDropDownViewResource(android.R.layout.select_dialog_singlechoice);
+        spinnerDir.setAdapter(adapterDir);
         //set adapter com array de strings
+
+        rdgRazao = findViewById(R.id.rdgRazao);
+        tfCustom = findViewById(R.id.tfCustom);
 
         cbTheme = findViewById(R.id.cbTheme);
         btnDelete = findViewById(R.id.btnDelete);
@@ -105,7 +148,7 @@ public class ConfigActivity extends AppCompatActivity {
     }
 
     private void close(){
-        if(config.getOrder()!=spinnerOrder.getSelectedItemPosition() || config.getDark()!=cbTheme.isChecked()){
+        if(config.getOrder()!=spinnerOrder.getSelectedItemPosition() || config.getDir()!=spinnerDir.getSelectedItemPosition() || config.getDark()!=cbTheme.isChecked()){
             AlertDialog alerta;
             AlertDialog.Builder builder = new AlertDialog.Builder(ConfigActivity.this);
             builder.setCancelable(true);
@@ -156,9 +199,25 @@ public class ConfigActivity extends AppCompatActivity {
 
     private void salvar(){
         int position = spinnerOrder.getSelectedItemPosition();
+        int direction = spinnerDir.getSelectedItemPosition();
+        double razao = 0.70;
+        boolean isPadrao07 = true;
+
+        if(rdgRazao.getCheckedRadioButtonId() == R.id.rdbCustom){
+            if(TextUtils.isEmpty(tfCustom.getText()) || (Double.parseDouble(tfCustom.getText().toString())<0.0 || Double.parseDouble(tfCustom.getText().toString())>100.0)){
+                Toast.makeText(this, "Por favor preencha o campo corretamente!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            else{
+                razao = Double.parseDouble(tfCustom.getText().toString())/100.0;
+                isPadrao07 = false;
+
+            }
+        }
+
         boolean isDarkNovo = cbTheme.isChecked();
 
-        config.salvar(position,isDarkNovo);
+        config.salvar(position,direction,razao,isPadrao07,isDarkNovo);
 
         if(isDarkNovo){
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
@@ -167,7 +226,7 @@ public class ConfigActivity extends AppCompatActivity {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
 
-        Log.i("SharedPreferences", config.getOrder() + ", DarkMode: " + config.getDark());
+        Log.i("SharedPreferences", config.getOrder() + " " + config.getDir() + " " + config.getRazao() + ", DarkMode: " + config.getDark());
         Toast.makeText(ConfigActivity.this, "Configurações salvas!", Toast.LENGTH_SHORT).show();
         finish();
     }
@@ -176,6 +235,8 @@ public class ConfigActivity extends AppCompatActivity {
         config.limpar();
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         spinnerOrder.setSelection(0);
+        spinnerDir.setSelection(0);
+        rdgRazao.check(R.id.rdbPadrao);
         cbTheme.setChecked(false);
     }
 

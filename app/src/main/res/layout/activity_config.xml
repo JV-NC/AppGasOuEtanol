@@ -16,68 +16,136 @@
         app:titleMarginStart="18dp"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:popupTheme="@style/Theme.MaterialComponents.Light.DarkActionBar"/>
-
-    <TextView
-        android:id="@+id/lblOrder"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/txtOrdenar"
-        android:textSize="14sp"
-        android:layout_marginTop="32dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"/>
+        android:layout_height="wrap_content">
 
-    <Spinner
-        android:id="@+id/spinnerOrder"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:spinnerMode="dropdown"
-        android:background="@drawable/padrao_edittext"
-        android:backgroundTint="@color/lavender"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"/>
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    <CheckBox
-        android:id="@+id/cbTheme"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/txtDarkTheme"
-        android:textSize="20sp"
-        android:layout_marginTop="32dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"/>
+            <TextView
+                android:id="@+id/lblOrder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/txtOrdenar"
+                android:textSize="14sp"
+                android:layout_marginTop="32dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"/>
 
-    <Button
-        android:id="@+id/btnDelete"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/txtDeletarReg"
-        android:backgroundTint="@color/lavender"
-        android:textColor="@color/white"
-        android:layout_marginTop="32dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"/>
+            <Spinner
+                android:id="@+id/spinnerOrder"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:spinnerMode="dropdown"
+                android:background="@drawable/padrao_edittext"
+                android:backgroundTint="@color/lavender"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"/>
 
-    <Button
-        android:id="@+id/btnStandard"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/txtRedefinirConfig"
-        android:backgroundTint="@color/lavender"
-        android:textColor="@color/white"
-        android:layout_marginTop="32dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"/>
+            <Spinner
+                android:id="@+id/spinnerDir"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:spinnerMode="dropdown"
+                android:background="@drawable/padrao_edittext"
+                android:backgroundTint="@color/lavender"
+                android:layout_marginTop="32dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"/>
 
-    <Button
-        android:id="@+id/btnSalvar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/txtSalvar"
-        android:backgroundTint="@color/lavender"
-        android:textColor="@color/white"
-        android:layout_marginTop="32dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"/>
+            <TextView
+                android:id="@+id/lblRazaoConfig"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/txtRazaoConfig"
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"/>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <RadioGroup
+                    android:id="@+id/rdgRazao"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginStart="16dp">
+
+                    <RadioButton
+                        android:id="@+id/rdbPadrao"
+                        android:layout_width="140dp"
+                        android:layout_height="wrap_content"
+                        android:text="@string/txtPadrao"/>
+
+                    <RadioButton
+                        android:id="@+id/rdbCustom"
+                        android:layout_width="140dp"
+                        android:layout_height="wrap_content"
+                        android:text="@string/txtCustom"/>
+                </RadioGroup>
+
+                <EditText
+                    android:id="@+id/tfCustom"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/hintCustom"
+                    android:inputType="numberDecimal"
+                    android:layout_toEndOf="@id/rdgRazao"
+                    android:layout_alignBottom="@id/rdgRazao"
+                    android:enabled="false"
+                    android:visibility="invisible"/>
+            </RelativeLayout>
+
+            <CheckBox
+                android:id="@+id/cbTheme"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/txtDarkTheme"
+                android:textSize="20sp"
+                android:layout_marginTop="32dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"/>
+
+            <Button
+                android:id="@+id/btnDelete"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/txtDeletarReg"
+                android:backgroundTint="@color/lavender"
+                android:textColor="@color/white"
+                android:layout_marginTop="32dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"/>
+
+            <Button
+                android:id="@+id/btnStandard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/txtRedefinirConfig"
+                android:backgroundTint="@color/lavender"
+                android:textColor="@color/white"
+                android:layout_marginTop="32dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"/>
+
+            <Button
+                android:id="@+id/btnSalvar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/txtSalvar"
+                android:backgroundTint="@color/lavender"
+                android:textColor="@color/white"
+                android:layout_marginTop="32dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"/>
+        </LinearLayout>
+
+    </ScrollView>
+
 
 </LinearLayout>
