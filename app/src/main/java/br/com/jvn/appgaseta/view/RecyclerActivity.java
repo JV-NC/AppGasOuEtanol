@@ -36,6 +36,7 @@ public class RecyclerActivity extends AppCompatActivity {
         controller = new ControllerCombustivel();
         db = new GasEtaDB(RecyclerActivity.this);
         ConfigController config = new ConfigController(RecyclerActivity.this);
+
         String order;
         if(config.getOrder()==0){
             order = "id";
@@ -63,18 +64,10 @@ public class RecyclerActivity extends AppCompatActivity {
             @Override
             public void onItemClick(int position) { // ao clickar no item
                 Intent it = new Intent(RecyclerActivity.this,UpdateActivity.class);
-                it.putExtra("Combustivel",combustivelAdapter.getCombustiveis().get(position));
-
-                int aux;
-                if(combustivelAdapter.getCombustiveis().get(position).getId()%2==0){
-                    aux=position-1;
-                }
-                else{
-                    aux=position+1;
-                }
-                it.putExtra("CombustivelAux",combustivelAdapter.getCombustiveis().get(aux));
+                it.putExtra("Combustivel",combustivelAdapter.getCombustiveis().get(position)); //combustivel a ser alterado
 
                 startActivity(it);
+
                 finish();
             }
         });
@@ -119,20 +112,6 @@ public class RecyclerActivity extends AppCompatActivity {
             combustivelAdapter.notifyItemRemoved(pos);
             if(id!=-1){
                 controller.deletar(id,db);
-
-                int aux;
-                if(id%2==0){
-                    aux = pos-1;
-                }
-                else {
-                    aux = pos;
-                }
-
-                id = combustivelAdapter.removeCombustivel(aux);
-                combustivelAdapter.notifyItemRemoved(aux);
-                if(id!=-1){
-                    controller.deletar(id,db);
-                }
             }
         }
     }

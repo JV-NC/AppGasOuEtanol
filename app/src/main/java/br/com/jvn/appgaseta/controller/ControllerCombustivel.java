@@ -16,13 +16,13 @@ public class ControllerCombustivel{
 
     public void salvar(Combustivel combustivel,GasEtaDB db){
         String sql = "insert into Combustivel " +
-                "(nomeCombustivel, " +
-                "precoCombustivel, " +
+                "(precoGas, " +
+                "precoEta, " +
                 "razao, " +
                 "date)" +
                 "values (" +
-                "'"+combustivel.getNome()+"', " +
-                "'"+String.valueOf(combustivel.getPreco())+"', " +
+                "'"+String.valueOf(combustivel.getPrecoGas())+"', " +
+                "'"+String.valueOf(combustivel.getPrecoEta())+"', " +
                 "'"+String.valueOf(combustivel.getRazao())+"', " +
                 "'"+ combustivel.getDate()+"')";
 
@@ -47,8 +47,8 @@ public class ControllerCombustivel{
                     registro = new Combustivel();
                     registro.setId(cursor.getInt(cursor.getColumnIndexOrThrow("id")));
 
-                    registro.setNome(cursor.getString(cursor.getColumnIndexOrThrow("nomeCombustivel")));
-                    registro.setPreco(cursor.getDouble(cursor.getColumnIndexOrThrow("precoCombustivel")));
+                    registro.setPrecoGas(cursor.getDouble(cursor.getColumnIndexOrThrow("precoGas")));
+                    registro.setPrecoEta(cursor.getDouble(cursor.getColumnIndexOrThrow("precoEta")));
                     registro.setRazao(cursor.getDouble(cursor.getColumnIndexOrThrow("razao")));
                     registro.setDate(cursor.getString(cursor.getColumnIndexOrThrow("date")));
 
@@ -68,8 +68,8 @@ public class ControllerCombustivel{
         Cursor cursor = db.abreRAWSQL(sql);
 
         combustivel.setId(cursor.getInt(cursor.getColumnIndexOrThrow("id")));
-        combustivel.setNome(cursor.getString(cursor.getColumnIndexOrThrow("nomeCombustivel")));
-        combustivel.setPreco(cursor.getDouble(cursor.getColumnIndexOrThrow("precoCombustivel")));
+        combustivel.setPrecoGas(cursor.getDouble(cursor.getColumnIndexOrThrow("precoGas")));
+        combustivel.setPrecoEta(cursor.getDouble(cursor.getColumnIndexOrThrow("precoEta")));
         combustivel.setRazao(cursor.getDouble(cursor.getColumnIndexOrThrow("razao")));
         combustivel.setDate(cursor.getString(cursor.getColumnIndexOrThrow("date")));
 
@@ -80,14 +80,14 @@ public class ControllerCombustivel{
         ContentValues dados = new ContentValues();
 
         dados.put("id",combustivel.getId());
-        dados.put("nomeCombustivel",combustivel.getNome());
-        dados.put("precoCombustivel",combustivel.getPreco());
+        dados.put("precoGas",combustivel.getPrecoGas());
+        dados.put("precoEta",combustivel.getPrecoEta());
         dados.put("razao",combustivel.getRazao());
         dados.put("date",combustivel.getDate());
 
         String sql = "UPDATE Combustivel " +
-                "SET nomeCombustivel = '"+ combustivel.getNome() + "', " +
-                "precoCombustivel = '"+ combustivel.getPreco() +"', "+
+                "SET precoGas = '"+ combustivel.getPrecoGas() + "', " +
+                "precoEta = '"+ combustivel.getPrecoEta() +"', "+
                 "razao = '"+ combustivel.getRazao() +"', " +
                 "date = '"+ combustivel.getDate() +"' "+
                 "WHERE id = '"+combustivel.getId()+"'";

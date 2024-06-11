@@ -26,8 +26,8 @@ import br.com.jvn.appgaseta.model.Combustivel;
 public class UpdateActivity extends AppCompatActivity {
     Toolbar toolbar;
     EditText tfId;
-    EditText tfNome;
-    EditText tfPreco;
+    EditText tfPrecoGas;
+    EditText tfPrecoEta;
     EditText tfRazao;
     EditText tfDate;
     Button btnAtualizar;
@@ -38,9 +38,8 @@ public class UpdateActivity extends AppCompatActivity {
         setContentView(R.layout.activity_update);
 
         Combustivel combustivel = getIntent().getParcelableExtra("Combustivel"); //recebe combustivel a alterar;
-        Combustivel aux = getIntent().getParcelableExtra("CombustivelAux"); //recebe o aux
-        if(aux==null){
-            Log.e("ParcelableExtra","aux é nulo");
+        if(combustivel==null){
+            Log.e("ParcelableExtra","combustivel parsed é nulo");
             finish();
         }
 
@@ -48,7 +47,7 @@ public class UpdateActivity extends AppCompatActivity {
         btnAtualizar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                atualizar(combustivel,aux);
+                atualizar(combustivel);
             }
         });
     }
@@ -76,8 +75,8 @@ public class UpdateActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         tfId = findViewById(R.id.tfId);
-        tfNome = findViewById(R.id.tfNome);
-        tfPreco = findViewById(R.id.tfPreco);
+        tfPrecoGas = findViewById(R.id.tfPrecoGas);
+        tfPrecoEta = findViewById(R.id.tfPrecoEta);
         tfRazao = findViewById(R.id.tfRazao);
         tfDate = findViewById(R.id.tfDate);
 
@@ -86,32 +85,25 @@ public class UpdateActivity extends AppCompatActivity {
         DecimalFormat df = new DecimalFormat("#0.00"); //formatar valores com decimais
 
         tfId.setText(String.valueOf(combustivel.getId()));
-        tfNome.setText(combustivel.getNome());
-        tfPreco.setText(df.format(combustivel.getPreco()));
+        tfPrecoGas.setText(df.format(combustivel.getPrecoGas()));
+        tfPrecoEta.setText(df.format(combustivel.getPrecoEta()));
         tfRazao.setText(df.format(combustivel.getRazao()));
         tfDate.setText(combustivel.getDate());
     }
 
     private boolean verifyTextFields(){
         boolean check = true;
-        if(TextUtils.isEmpty(tfNome.getText())){
-            tfNome.setError("Obrigatório");
-            tfNome.requestFocus();
+        if(TextUtils.isEmpty(tfPrecoGas.getText()) || tfPrecoGas.getText().toString().compareTo(".")==0){
+            tfPrecoGas.setError("Obrigatório");
+            tfPrecoGas.requestFocus();
             check = false;
         }
-        if(TextUtils.isEmpty(tfPreco.getText()) || tfPreco.getText().toString().compareTo(".")==0){
-            tfPreco.setError("Obrigatório");
-            tfPreco.requestFocus();
+        if(TextUtils.isEmpty(tfPrecoEta.getText()) || tfPrecoEta.getText().toString().compareTo(".")==0){
+            tfPrecoEta.setError("Obrigatório");
+            tfPrecoEta.requestFocus();
             check = false;
         }
         return check;
-    }
-
-    private double calculaRazao(Combustivel com1, Combustivel com2) {
-        if(com1.getId()%2==0){
-            return UtilGasEta.calcularRazao(com1.getPreco(),com2.getPreco());
-        }
-        return UtilGasEta.calcularRazao(com2.getPreco(),com1.getPreco());
     }
 
     private void callRecycler(){
@@ -119,21 +111,19 @@ public class UpdateActivity extends AppCompatActivity {
         startActivity(it);
     }
 
-    private void atualizar(Combustivel combustivel, Combustivel aux){
+    private void atualizar(Combustivel combustivel){
         if (verifyTextFields()){
-            //combustivel.setNome(tfNome.getText().toString());
-            combustivel.setPreco(Double.parseDouble(tfPreco.getText().toString()));
+            combustivel.setPrecoGas(Double.parseDouble(tfPrecoGas.getText().toString()));
+            combustivel.setPrecoEta(Double.parseDouble(tfPrecoEta.getText().toString()));
 
-            double razao = calculaRazao(combustivel,aux);
+            double razao = UtilGasEta.calcularRazao(combustivel.getPrecoEta(),combustivel.getPrecoGas()); //calcula razao entre os novos valores
 
             combustivel.setRazao(razao);
-            aux.setRazao(razao);
 
             ControllerCombustivel controller = new ControllerCombustivel();
             GasEtaDB db = new GasEtaDB(UpdateActivity.this);
 
             controller.alterar(combustivel,db);
-            controller.alterar(aux,db);
 
             callRecycler();
 

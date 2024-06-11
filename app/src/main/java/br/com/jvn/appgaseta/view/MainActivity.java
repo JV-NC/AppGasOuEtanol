@@ -49,8 +49,7 @@ public class MainActivity extends AppCompatActivity {
 
     GasEtaDB db;
     ControllerCombustivel controller;
-    Combustivel Gas;
-    Combustivel Eta;
+    Combustivel combustivel;
     ActivityResultLauncher<Intent> activityResultLauncher;
 
     @Override
@@ -184,8 +183,7 @@ public class MainActivity extends AppCompatActivity {
             double razao = UtilGasEta.calcularRazao(Double.parseDouble(tfValorEta.getText().toString()),Double.parseDouble(tfValorGas.getText().toString()));
             DecimalFormat df = new DecimalFormat("#0.00");
 
-            Gas = new Combustivel("Gasolina",Double.parseDouble(tfValorGas.getText().toString()),razao);
-            Eta = new Combustivel("Etanol",Double.parseDouble(tfValorEta.getText().toString()),razao);
+            combustivel = new Combustivel(Double.parseDouble(tfValorGas.getText().toString()),Double.parseDouble(tfValorEta.getText().toString()),razao);
 
             lblResultado.setText(df.format(razao*100)+"%");
             canSave = true;
@@ -229,11 +227,9 @@ public class MainActivity extends AppCompatActivity {
     private void salvar(){
         if(checkTextFields()){
             String date = UtilGasEta.retornaData("yyyy/MM/dd HH:mm:ss",new Date(),0); //recebe a data do momento atual
-            Gas.setDate(date);
-            Eta.setDate(date);
+            combustivel.setDate(date);
 
-            controller.salvar(Gas,db);
-            controller.salvar(Eta,db);
+            controller.salvar(combustivel,db);
 
             Toast.makeText(MainActivity.this,"Valores Salvos com Sucesso!",Toast.LENGTH_SHORT).show();
             canSave = false;

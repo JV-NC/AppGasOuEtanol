@@ -52,7 +52,7 @@ public class CombustivelAdapter extends RecyclerView.Adapter<CombustivelAdapter.
     @Override
     public void onBindViewHolder(@NonNull CombustivelViewHolder holder, int position) {
         Combustivel combustivel = combustiveis.get(position);
-        holder.bind(combustivel);
+        holder.bind(combustivel,position);
 
         holder.cvContainer.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,33 +69,33 @@ public class CombustivelAdapter extends RecyclerView.Adapter<CombustivelAdapter.
 
     class CombustivelViewHolder extends RecyclerView.ViewHolder{
         TextView lblIcon;
-        TextView lblNome;
-        TextView lblPreco;
+        TextView lblPrecoGas;
+        TextView lblPrecoEta;
         TextView lblRazao;
         TextView lblDate;
         CardView cvContainer;
         public CombustivelViewHolder(@NonNull View itemView) {
             super(itemView);
             lblIcon = itemView.findViewById(R.id.lblIcon);
-            lblNome = itemView.findViewById(R.id.lblNome);
-            lblPreco = itemView.findViewById(R.id.lblPreco);
+            lblPrecoGas = itemView.findViewById(R.id.lblPrecoGas);
+            lblPrecoEta = itemView.findViewById(R.id.lblPrecoEta);
             lblRazao = itemView.findViewById(R.id.lblRazao);
             lblDate = itemView.findViewById(R.id.lblDate);
             cvContainer = itemView.findViewById(R.id.cvContainer);
         }
 
-        public void bind(Combustivel combustivel) {
+        public void bind(Combustivel combustivel, int position) {
             DecimalFormat df = new DecimalFormat("#0.00");
-            lblIcon.setText(String.valueOf(combustivel.getNome().charAt(0)));
-            if(combustivel.getNome().compareTo("Gasolina")==0){
+            lblIcon.setText(String.valueOf(position+1));
+            if(position%2==0){
                 lblIcon.setBackground(oval(Color.rgb(192,0,0),lblIcon));
             }
             else{
                 lblIcon.setBackground(oval(Color.rgb(0,192,0),lblIcon));
             }
-            lblNome.setText(combustivel.getNome());
-            lblPreco.setText("R$ "+df.format(combustivel.getPreco()));
-            lblRazao.setText(df.format(combustivel.getRazao()*100)+"%");
+            lblPrecoGas.setText("Gas: R$ "+df.format(combustivel.getPrecoGas()));
+            lblPrecoEta.setText("Eta: R$ "+df.format(combustivel.getPrecoEta()));
+            lblRazao.setText("Eta/Gas: "+df.format(combustivel.getRazao()*100)+"%");
             //formato da data
             lblDate.setText(UtilGasEta.reformatarData("yyyy/MM/dd HH:mm:ss","dd/MM/yyyy HH:mm:ss",combustivel.getDate()));
         }

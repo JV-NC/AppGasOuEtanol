@@ -10,7 +10,6 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class UtilGasEta {
-    public static final double PADRAO_70 = 0.7;
     public static String calcularMelhorOpcao(double gasolina, double etanol,double razao){ //utiliza uma razão para retornar melhor opção
         //preço ideal = gasolina * razao
 

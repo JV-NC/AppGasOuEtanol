@@ -49,8 +49,8 @@ public class GasEtaDBCore extends SQLiteOpenHelper {
 
 
         sql = "CREATE TABLE Combustivel(id INTEGER PRIMARY KEY AUTOINCREMENT, "+
-                "nomeCombustivel TEXT, "+
-                "precoCombustivel REAL, "+
+                "precoGas REAL, "+
+                "precoEta REAL, "+
                 "razao REAL, "+
                 "date TEXT)";
         db.execSQL(sql);
