@@ -150,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
             lblPadrao.setText(R.string.txtPadraoMain);
         }
         else{
-            DecimalFormat df = new DecimalFormat("#0.00");
+            DecimalFormat df = new DecimalFormat("#0");
             lblPadrao.setText("Padrão: "+df.format(config.getRazao()*100)+"%");
         }
     }

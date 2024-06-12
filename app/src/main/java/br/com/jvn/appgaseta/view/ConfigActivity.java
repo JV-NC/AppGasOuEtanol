@@ -57,7 +57,7 @@ public class ConfigActivity extends AppCompatActivity {
         }
         else{
             rdgRazao.check(R.id.rdbCustom);
-            DecimalFormat df = new DecimalFormat("#0.00");
+            DecimalFormat df = new DecimalFormat("#0");
             tfCustom.setText(df.format(config.getRazao()*100));
             tfCustom.setEnabled(true);
             tfCustom.setVisibility(EditText.VISIBLE);

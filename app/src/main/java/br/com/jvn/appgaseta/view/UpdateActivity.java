@@ -6,7 +6,9 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -50,6 +52,40 @@ public class UpdateActivity extends AppCompatActivity {
                 atualizar(combustivel);
             }
         });
+
+        tfPrecoGas.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                calcularRazao();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        tfPrecoEta.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                calcularRazao();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
     }
 
     @Override
@@ -87,7 +123,7 @@ public class UpdateActivity extends AppCompatActivity {
         tfId.setText(String.valueOf(combustivel.getId()));
         tfPrecoGas.setText(df.format(combustivel.getPrecoGas()));
         tfPrecoEta.setText(df.format(combustivel.getPrecoEta()));
-        tfRazao.setText(df.format(combustivel.getRazao()));
+        tfRazao.setText(df.format(combustivel.getRazao()*100));
         tfDate.setText(combustivel.getDate());
     }
 
@@ -107,7 +143,7 @@ public class UpdateActivity extends AppCompatActivity {
     }
 
     private void callRecycler(){
-        Intent it = new Intent(UpdateActivity.this,RecyclerActivity.class);;
+        Intent it = new Intent(UpdateActivity.this,RecyclerActivity.class);
         startActivity(it);
     }
 
@@ -125,6 +161,8 @@ public class UpdateActivity extends AppCompatActivity {
 
             controller.alterar(combustivel,db);
 
+            Toast.makeText(UpdateActivity.this, "Registro alterado com sucesso!", Toast.LENGTH_SHORT).show();
+
             callRecycler();
 
             finish();
@@ -132,5 +170,17 @@ public class UpdateActivity extends AppCompatActivity {
         else {
             Toast.makeText(UpdateActivity.this, "Por favor, verifique os campos!", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void calcularRazao(){
+        if(TextUtils.isEmpty(tfPrecoGas.getText()) || TextUtils.isEmpty(tfPrecoEta.getText()) || tfPrecoGas.getText().toString().compareTo(".")==0 || tfPrecoEta.getText().toString().compareTo(".")==0){
+            tfRazao.setText("Null");
+        }
+        else{
+            double razaoAtual = Double.parseDouble(tfPrecoEta.getText().toString())/Double.parseDouble(tfPrecoGas.getText().toString());
+            DecimalFormat df =new DecimalFormat("#0.00");
+            tfRazao.setText(df.format(razaoAtual*100));
+        }
+
     }
 }
