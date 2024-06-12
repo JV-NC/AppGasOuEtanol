@@ -42,6 +42,13 @@ public class CombustivelAdapter extends RecyclerView.Adapter<CombustivelAdapter.
         return id;
     }
 
+    public void alteraCombustivel(int position, double precoGas, double precoEta, double razao){
+        Combustivel combustivel = combustiveis.get(position);
+        combustivel.setPrecoGas(precoGas);
+        combustivel.setPrecoEta(precoEta);
+        combustivel.setRazao(razao);
+    }
+
     @NonNull
     @Override
     public CombustivelViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

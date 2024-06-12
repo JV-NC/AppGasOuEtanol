@@ -1,5 +1,9 @@
 package br.com.jvn.appgaseta.view;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -12,6 +16,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import br.com.jvn.appgaseta.R;
@@ -28,6 +33,8 @@ public class RecyclerActivity extends AppCompatActivity {
     GasEtaDB db;
     RecyclerView rv;
     CombustivelAdapter combustivelAdapter;
+
+    ActivityResultLauncher<Intent> activityResultLauncher;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +43,8 @@ public class RecyclerActivity extends AppCompatActivity {
         controller = new ControllerCombustivel();
         db = new GasEtaDB(RecyclerActivity.this);
         ConfigController config = new ConfigController(RecyclerActivity.this);
+
+        setActivityResultLauncher();
 
         String order;
         if(config.getOrder()==0){
@@ -65,10 +74,9 @@ public class RecyclerActivity extends AppCompatActivity {
             public void onItemClick(int position) { // ao clickar no item
                 Intent it = new Intent(RecyclerActivity.this,UpdateActivity.class);
                 it.putExtra("Combustivel",combustivelAdapter.getCombustiveis().get(position)); //combustivel a ser alterado
+                it.putExtra("position",position);
 
-                startActivity(it);
-
-                finish();
+                activityResultLauncher.launch(it);
             }
         });
 
@@ -76,6 +84,36 @@ public class RecyclerActivity extends AppCompatActivity {
 
         ItemTouchHelper helper = new ItemTouchHelper(new ItemTouchHandler(0,ItemTouchHelper.LEFT));
         helper.attachToRecyclerView(rv);
+    }
+
+    private void setActivityResultLauncher() {
+        activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult activityResult) {
+                        int result = activityResult.getResultCode();
+                        Intent it = activityResult.getData();
+
+                        if (result == RESULT_OK){
+                            Log.i("ResultLauncher","Salvo!");
+                            if (it != null) {
+                                String precoGas = it.getStringExtra("precoGas");
+                                String precoEta = it.getStringExtra("precoEta");
+                                double razao = it.getDoubleExtra("razao",-1);
+                                int position = it.getIntExtra("position",-1);
+                                Log.e("PosicaoAcessada","Posicao: "+position);
+                                if(position!=-1){
+                                    combustivelAdapter.alteraCombustivel(position,Double.parseDouble(precoGas),Double.parseDouble(precoEta),razao);
+                                    combustivelAdapter.notifyItemChanged(position);
+                                }
+                            }
+
+                        }
+                        else if (result == RESULT_CANCELED){
+                            Log.i("ResultLauncher","Cancelado!");
+                        }
+                    }
+                });
     }
 
     @Override

@@ -33,6 +33,7 @@ public class UpdateActivity extends AppCompatActivity {
     EditText tfRazao;
     EditText tfDate;
     Button btnAtualizar;
+    int position;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +41,7 @@ public class UpdateActivity extends AppCompatActivity {
         setContentView(R.layout.activity_update);
 
         Combustivel combustivel = getIntent().getParcelableExtra("Combustivel"); //recebe combustivel a alterar;
+        position = getIntent().getIntExtra("position",-1);
         if(combustivel==null){
             Log.e("ParcelableExtra","combustivel parsed é nulo");
             finish();
@@ -99,7 +101,8 @@ public class UpdateActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if(id==R.id.itemRecyclerClose){
-            callRecycler();
+            //adicionar verificação
+            setResult(RESULT_CANCELED);
             finish();
         }
 
@@ -142,11 +145,6 @@ public class UpdateActivity extends AppCompatActivity {
         return check;
     }
 
-    private void callRecycler(){
-        Intent it = new Intent(UpdateActivity.this,RecyclerActivity.class);
-        startActivity(it);
-    }
-
     private void atualizar(Combustivel combustivel){
         if (verifyTextFields()){
             combustivel.setPrecoGas(Double.parseDouble(tfPrecoGas.getText().toString()));
@@ -163,8 +161,12 @@ public class UpdateActivity extends AppCompatActivity {
 
             Toast.makeText(UpdateActivity.this, "Registro alterado com sucesso!", Toast.LENGTH_SHORT).show();
 
-            callRecycler();
-
+            Intent it = new Intent();
+            it.putExtra("precoGas",tfPrecoGas.getText().toString());
+            it.putExtra("precoEta",tfPrecoEta.getText().toString());
+            it.putExtra("razao",razao);
+            it.putExtra("position",position);
+            setResult(RESULT_OK,it); //confirma resultado e passa intent com valores necessários
             finish();
         }
         else {
@@ -181,6 +183,5 @@ public class UpdateActivity extends AppCompatActivity {
             DecimalFormat df =new DecimalFormat("#0.00");
             tfRazao.setText(df.format(razaoAtual*100));
         }
-
     }
 }
