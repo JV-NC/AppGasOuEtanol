@@ -19,35 +19,6 @@ public class GasEtaDBCore extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         String sql;
 
-        sql = "create table tbconfig (" +
-                "idconfig integer primary key," +
-                "registrado text, "+
-                "chaveprivada text, "+
-                "nome text, "+
-                "email text, "+
-                "telefone text, "+
-                "guid text)";
-        db.execSQL(sql);
-
-        UUID s = UUID.randomUUID();
-        sql = "insert into tbconfig (" +
-                "idconfig, " +
-                "registrado, "+
-                "nome, "+
-                "email, "+
-                "telefone, "+
-                "guid)" +
-                "values" +
-                "(1," +
-                "'N',"+//urlservidor
-                "'',"+//nome
-                "'',"+//email
-                "'',"+//telefone
-                "'"+s.toString().replaceAll("-", "")+"')";
-        db.execSQL(sql);
-
-
-
         sql = "CREATE TABLE Combustivel(id INTEGER PRIMARY KEY AUTOINCREMENT, "+
                 "precoGas REAL, "+
                 "precoEta REAL, "+
