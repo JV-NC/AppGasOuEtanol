@@ -16,7 +16,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import br.com.jvn.appgaseta.R;

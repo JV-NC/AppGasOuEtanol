@@ -22,7 +22,7 @@ import br.com.jvn.appgaseta.interfaces.CombustivelAdpterListener;
 
 public class CombustivelAdapter extends RecyclerView.Adapter<CombustivelAdapter.CombustivelViewHolder> {
     private final ArrayList<Combustivel> combustiveis;
-    private CombustivelAdpterListener listener;
+    private final CombustivelAdpterListener listener;
 
     public CombustivelAdapter(ArrayList<Combustivel> combustiveis,CombustivelAdpterListener listener) {
         this.combustiveis = combustiveis;
