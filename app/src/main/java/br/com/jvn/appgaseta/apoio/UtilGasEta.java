@@ -59,4 +59,9 @@ public class UtilGasEta {
         }
         return null;
     }
+
+    public static boolean assertDecimalEquals(double v1, double v2) {
+        double epsilon = 0.000001d;
+        return Math.abs(v1 - v2) < epsilon;
+    }
 }

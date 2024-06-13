@@ -1,5 +1,6 @@
 package br.com.jvn.appgaseta.view;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -35,6 +36,9 @@ public class UpdateActivity extends AppCompatActivity {
     Button btnAtualizar;
     int position;
 
+    ControllerCombustivel controller;
+    GasEtaDB db;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +50,9 @@ public class UpdateActivity extends AppCompatActivity {
             Log.e("ParcelableExtra","combustivel parsed é nulo");
             finish();
         }
+
+        controller = new ControllerCombustivel();
+        db = new GasEtaDB(UpdateActivity.this);
 
         setLayout(combustivel);
         btnAtualizar.setOnClickListener(new View.OnClickListener() {
@@ -88,6 +95,13 @@ public class UpdateActivity extends AppCompatActivity {
 
             }
         });
+
+        getOnBackPressedDispatcher().addCallback(UpdateActivity.this, new OnBackPressedCallback(true) { //botão back
+            @Override
+            public void handleOnBackPressed() {
+                closeUpdate();
+            }
+        });
     }
 
     @Override
@@ -101,9 +115,7 @@ public class UpdateActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if(id==R.id.itemRecyclerClose){
-            //adicionar verificação
-            setResult(RESULT_CANCELED);
-            finish();
+            closeUpdate();
         }
 
         return super.onOptionsItemSelected(item);
@@ -154,9 +166,6 @@ public class UpdateActivity extends AppCompatActivity {
 
             combustivel.setRazao(razao);
 
-            ControllerCombustivel controller = new ControllerCombustivel();
-            GasEtaDB db = new GasEtaDB(UpdateActivity.this);
-
             controller.alterar(combustivel,db);
 
             Toast.makeText(UpdateActivity.this, "Registro alterado com sucesso!", Toast.LENGTH_SHORT).show();
@@ -183,5 +192,10 @@ public class UpdateActivity extends AppCompatActivity {
             DecimalFormat df =new DecimalFormat("#0.00");
             tfRazao.setText(df.format(razaoAtual*100));
         }
+    }
+
+    private void closeUpdate(){
+        setResult(RESULT_CANCELED);
+        finish();
     }
 }
