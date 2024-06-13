@@ -20,8 +20,6 @@
     <string name="txtEmail">joaovnevescosta@hotmail.com</string>
     <string name="txtDedicatoria">Dedicated to Anderson Silva</string>
     <string name="hintId">Id</string>
-    <string name="hintNome">Nome</string>
-    <string name="hintPreco">Preço</string>
     <string name="hintRazao">Razao</string>
     <string name="hintDate">Data</string>
     <string name="txtAtualizar">Atualizar</string>
@@ -31,9 +29,10 @@
     <string name="txtDeletarReg">DELETAR TODOS OS REGISTROS SALVOS</string>
     <string name="txtRedefinirConfig">REDEFINIR CONFIGURAÇÕES PADRÃO</string>
     <string name="txtRazaoConfig">Taxa de aproveitamento Etanol/Gasolina:</string>
-    <string name="txtPadrao">Padrao 70%</string>
+    <string name="txtPadrao">Padrão 70%</string>
     <string name="txtCustom">Customizado:</string>
     <string name="hintCustom">Ex (70) %</string>
+    <string name="txtPadraoMain">Padrão: 70%</string>
 
 <string-array name="Ordenacao">
     <item>Data</item>

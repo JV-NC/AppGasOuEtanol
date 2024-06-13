@@ -1,12 +1,15 @@
 package br.com.jvn.appgaseta.view;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,11 +29,15 @@ import br.com.jvn.appgaseta.model.Combustivel;
 public class UpdateActivity extends AppCompatActivity {
     Toolbar toolbar;
     EditText tfId;
-    EditText tfNome;
-    EditText tfPreco;
+    EditText tfPrecoGas;
+    EditText tfPrecoEta;
     EditText tfRazao;
     EditText tfDate;
     Button btnAtualizar;
+    int position;
+
+    ControllerCombustivel controller;
+    GasEtaDB db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,17 +45,61 @@ public class UpdateActivity extends AppCompatActivity {
         setContentView(R.layout.activity_update);
 
         Combustivel combustivel = getIntent().getParcelableExtra("Combustivel"); //recebe combustivel a alterar;
-        Combustivel aux = getIntent().getParcelableExtra("CombustivelAux"); //recebe o aux
-        if(aux==null){
-            Log.e("ParcelableExtra","aux é nulo");
+        position = getIntent().getIntExtra("position",-1);
+        if(combustivel==null){
+            Log.e("ParcelableExtra","combustivel parsed é nulo");
             finish();
         }
+
+        controller = new ControllerCombustivel();
+        db = new GasEtaDB(UpdateActivity.this);
 
         setLayout(combustivel);
         btnAtualizar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                atualizar(combustivel,aux);
+                atualizar(combustivel);
+            }
+        });
+
+        tfPrecoGas.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                calcularRazao();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        tfPrecoEta.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                calcularRazao();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        getOnBackPressedDispatcher().addCallback(UpdateActivity.this, new OnBackPressedCallback(true) { //botão back
+            @Override
+            public void handleOnBackPressed() {
+                closeUpdate();
             }
         });
     }
@@ -64,8 +115,7 @@ public class UpdateActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if(id==R.id.itemRecyclerClose){
-            callRecycler();
-            finish();
+            closeUpdate();
         }
 
         return super.onOptionsItemSelected(item);
@@ -76,8 +126,8 @@ public class UpdateActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         tfId = findViewById(R.id.tfId);
-        tfNome = findViewById(R.id.tfNome);
-        tfPreco = findViewById(R.id.tfPreco);
+        tfPrecoGas = findViewById(R.id.tfPrecoGas);
+        tfPrecoEta = findViewById(R.id.tfPrecoEta);
         tfRazao = findViewById(R.id.tfRazao);
         tfDate = findViewById(R.id.tfDate);
 
@@ -86,61 +136,66 @@ public class UpdateActivity extends AppCompatActivity {
         DecimalFormat df = new DecimalFormat("#0.00"); //formatar valores com decimais
 
         tfId.setText(String.valueOf(combustivel.getId()));
-        tfNome.setText(combustivel.getNome());
-        tfPreco.setText(df.format(combustivel.getPreco()));
-        tfRazao.setText(df.format(combustivel.getRazao()));
+        tfPrecoGas.setText(df.format(combustivel.getPrecoGas()));
+        tfPrecoEta.setText(df.format(combustivel.getPrecoEta()));
+        tfRazao.setText(df.format(combustivel.getRazao()*100));
         tfDate.setText(combustivel.getDate());
     }
 
     private boolean verifyTextFields(){
         boolean check = true;
-        if(TextUtils.isEmpty(tfNome.getText())){
-            tfNome.setError("Obrigatório");
-            tfNome.requestFocus();
+        if(TextUtils.isEmpty(tfPrecoGas.getText()) || tfPrecoGas.getText().toString().compareTo(".")==0){
+            tfPrecoGas.setError("Obrigatório");
+            tfPrecoGas.requestFocus();
             check = false;
         }
-        if(TextUtils.isEmpty(tfPreco.getText()) || tfPreco.getText().toString().compareTo(".")==0){
-            tfPreco.setError("Obrigatório");
-            tfPreco.requestFocus();
+        if(TextUtils.isEmpty(tfPrecoEta.getText()) || tfPrecoEta.getText().toString().compareTo(".")==0){
+            tfPrecoEta.setError("Obrigatório");
+            tfPrecoEta.requestFocus();
             check = false;
         }
         return check;
     }
 
-    private double calculaRazao(Combustivel com1, Combustivel com2) {
-        if(com1.getId()%2==0){
-            return UtilGasEta.calcularRazao(com1.getPreco(),com2.getPreco());
-        }
-        return UtilGasEta.calcularRazao(com2.getPreco(),com1.getPreco());
-    }
-
-    private void callRecycler(){
-        Intent it = new Intent(UpdateActivity.this,RecyclerActivity.class);;
-        startActivity(it);
-    }
-
-    private void atualizar(Combustivel combustivel, Combustivel aux){
+    private void atualizar(Combustivel combustivel){
         if (verifyTextFields()){
-            //combustivel.setNome(tfNome.getText().toString());
-            combustivel.setPreco(Double.parseDouble(tfPreco.getText().toString()));
+            combustivel.setPrecoGas(Double.parseDouble(tfPrecoGas.getText().toString()));
+            combustivel.setPrecoEta(Double.parseDouble(tfPrecoEta.getText().toString()));
 
-            double razao = calculaRazao(combustivel,aux);
+            double razao = UtilGasEta.calcularRazao(combustivel.getPrecoEta(),combustivel.getPrecoGas()); //calcula razao entre os novos valores
 
             combustivel.setRazao(razao);
-            aux.setRazao(razao);
-
-            ControllerCombustivel controller = new ControllerCombustivel();
-            GasEtaDB db = new GasEtaDB(UpdateActivity.this);
 
             controller.alterar(combustivel,db);
-            controller.alterar(aux,db);
 
-            callRecycler();
+            Toast.makeText(UpdateActivity.this, "Registro alterado com sucesso!", Toast.LENGTH_SHORT).show();
 
+            Intent it = new Intent();
+            it.putExtra("precoGas",tfPrecoGas.getText().toString());
+            it.putExtra("precoEta",tfPrecoEta.getText().toString());
+            it.putExtra("razao",razao);
+            it.putExtra("position",position);
+            setResult(RESULT_OK,it); //confirma resultado e passa intent com valores necessários
             finish();
         }
         else {
             Toast.makeText(UpdateActivity.this, "Por favor, verifique os campos!", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void calcularRazao(){
+        if(TextUtils.isEmpty(tfPrecoGas.getText()) || TextUtils.isEmpty(tfPrecoEta.getText()) || tfPrecoGas.getText().toString().compareTo(".")==0 || tfPrecoEta.getText().toString().compareTo(".")==0){
+            tfRazao.setText("Null");
+        }
+        else{
+            double razaoAtual = Double.parseDouble(tfPrecoEta.getText().toString())/Double.parseDouble(tfPrecoGas.getText().toString());
+            DecimalFormat df =new DecimalFormat("#0.00");
+            tfRazao.setText(df.format(razaoAtual*100));
+        }
+    }
+
+    private void closeUpdate(){
+        setResult(RESULT_CANCELED);
+        finish();
     }
 }

@@ -7,24 +7,24 @@ import androidx.annotation.NonNull;
 
 public class Combustivel implements Parcelable {
     private int id;
-    private String nome;
-    private double preco;
+    private double precoGas;
+    private double precoEta;
     private double razao;
     private String date;
 
     public Combustivel() {
     }
 
-    public Combustivel(String nome, double preco, double razao) {
-        setNome(nome);
-        setPreco(preco);
+    public Combustivel(double precoGas, double precoEta, double razao) {
+        setPrecoGas(precoGas);
+        setPrecoEta(precoEta);
         setRazao(razao);
     }
 
     protected Combustivel(Parcel in) {
         id = in.readInt();
-        nome = in.readString();
-        preco = in.readDouble();
+        precoGas = in.readDouble();
+        precoEta = in.readDouble();
         razao = in.readDouble();
         date = in.readString();
     }
@@ -49,20 +49,20 @@ public class Combustivel implements Parcelable {
         this.id = id;
     }
 
-    public String getNome() {
-        return nome;
+    public double getPrecoGas() {
+        return precoGas;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setPrecoGas(double precoGas) {
+        this.precoGas = precoGas;
     }
 
-    public double getPreco() {
-        return preco;
+    public double getPrecoEta() {
+        return precoEta;
     }
 
-    public void setPreco(double preco) {
-        this.preco = preco;
+    public void setPrecoEta(double precoEta) {
+        this.precoEta = precoEta;
     }
 
     public double getRazao() {
@@ -84,7 +84,7 @@ public class Combustivel implements Parcelable {
     @NonNull
     @Override
     public String toString() {
-        return nome+", R$"+String.valueOf(preco)+", Razão Gas/Eta: "+razao+", "+date;
+        return "Gasolina: R$"+String.valueOf(precoGas)+", Etanol: "+String.valueOf(precoEta)+", Razão Gas/Eta: "+razao+", "+date;
     }
 
     @Override
@@ -95,8 +95,8 @@ public class Combustivel implements Parcelable {
     @Override
     public void writeToParcel(@NonNull Parcel dest, int flags) {
         dest.writeInt(id);
-        dest.writeString(nome);
-        dest.writeDouble(preco);
+        dest.writeDouble(precoGas);
+        dest.writeDouble(precoEta);
         dest.writeDouble(razao);
         dest.writeString(date);
     }

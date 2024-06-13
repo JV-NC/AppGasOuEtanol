@@ -57,33 +57,6 @@ public class GasEtaDB{
     }
 
     public Cursor abreSQL(String table, String[]columns, String selection, String[] selectionArgs, String groupBy, String having, String orderBy){
-        Cursor cursor = db.query(table, columns, selection, selectionArgs, groupBy, having, orderBy, orderBy);
-        return cursor;
-    }
-
-    public String getConfig(String nomecampo){
-        //Log.e("getConfig,nomecampo);
-        String campo = "";
-        try {
-            Cursor cursor = db.rawQuery("select * from tbconfig where idconfig=1",null);
-            cursor.moveToFirst();
-            campo = cursor.getString(cursor.getColumnIndexOrThrow(nomecampo)).toString();
-            //Log.e("Valor",campo);
-        }catch (Exception e){
-            Log.e("getConfig", "Falha ao ler valor de "+nomecampo+" - Motivo: "+e.getMessage());
-        }
-
-        if(campo==null){
-            campo="";
-        }
-        return campo;
-    }
-
-    public void setConfig(String nomecampo, String valor){
-        try{
-            db.execSQL("update tbconfig set"+nomecampo+" = '"+valor+"''");
-        }catch (Exception e){
-            Log.e("setConfig","Falha ao rodar update - Motivo: "+e.getMessage());
-        }
+        return db.query(table, columns, selection, selectionArgs, groupBy, having, orderBy, orderBy);
     }
 }

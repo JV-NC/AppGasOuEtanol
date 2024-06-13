@@ -1,5 +1,9 @@
 package br.com.jvn.appgaseta.view;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -36,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     ConfigController config;
     Toolbar toolbar;
     BottomAppBar bottomAppBar;
+    TextView lblPadrao;
     EditText tfValorGas;
     EditText tfValorEta;
     TextView lblResultado;
@@ -44,13 +49,15 @@ public class MainActivity extends AppCompatActivity {
 
     GasEtaDB db;
     ControllerCombustivel controller;
-    Combustivel Gas;
-    Combustivel Eta;
+    Combustivel combustivel;
+    ActivityResultLauncher<Intent> activityResultLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        setActivityResultLauncher();
 
         db = new GasEtaDB(MainActivity.this);
         controller = new ControllerCombustivel();
@@ -82,11 +89,10 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
 
-        if(id == R.id.itemSettings){
-            startActivity(new Intent(MainActivity.this,ConfigActivity.class));
-        } else if(id == R.id.itemAbout) {
+        if(id == R.id.itemSettings){ //ConfigActivity
+            activityResultLauncher.launch(new Intent(MainActivity.this,ConfigActivity.class));
+        } else if(id == R.id.itemAbout) { //AboutActivity
             startActivity(new Intent(MainActivity.this,AboutActivity.class));
-
         } else if(id == R.id.itemExit) {
             finish();
         }
@@ -96,6 +102,9 @@ public class MainActivity extends AppCompatActivity {
     private void setLayout(){
         toolbar = findViewById(R.id.toolbarMain);
         setSupportActionBar(toolbar);
+
+        lblPadrao = findViewById(R.id.lblPadrao);
+        setLblPadrao();
 
         bottomAppBar = findViewById(R.id.bottomAppbar);
         tfValorGas = findViewById(R.id.tfValorGas);
@@ -136,6 +145,16 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void setLblPadrao(){
+        if(config.getIsPadrao07()){
+            lblPadrao.setText(R.string.txtPadraoMain);
+        }
+        else{
+            DecimalFormat df = new DecimalFormat("#0");
+            lblPadrao.setText("Padrão: "+df.format(config.getRazao()*100)+"%");
+        }
+    }
+
     private boolean checkTextFields(){
         boolean verify = true; //verifica se os campos estão vazios
         if(TextUtils.isEmpty(tfValorGas.getText()) || tfValorGas.getText().toString().compareTo(".")==0){
@@ -164,8 +183,7 @@ public class MainActivity extends AppCompatActivity {
             double razao = UtilGasEta.calcularRazao(Double.parseDouble(tfValorEta.getText().toString()),Double.parseDouble(tfValorGas.getText().toString()));
             DecimalFormat df = new DecimalFormat("#0.00");
 
-            Gas = new Combustivel("Gasolina",Double.parseDouble(tfValorGas.getText().toString()),razao);
-            Eta = new Combustivel("Etanol",Double.parseDouble(tfValorEta.getText().toString()),razao);
+            combustivel = new Combustivel(Double.parseDouble(tfValorGas.getText().toString()),Double.parseDouble(tfValorEta.getText().toString()),razao);
 
             lblResultado.setText(df.format(razao*100)+"%");
             canSave = true;
@@ -209,11 +227,9 @@ public class MainActivity extends AppCompatActivity {
     private void salvar(){
         if(checkTextFields()){
             String date = UtilGasEta.retornaData("yyyy/MM/dd HH:mm:ss",new Date(),0); //recebe a data do momento atual
-            Gas.setDate(date);
-            Eta.setDate(date);
+            combustivel.setDate(date);
 
-            controller.salvar(Gas,db);
-            controller.salvar(Eta,db);
+            controller.salvar(combustivel,db);
 
             Toast.makeText(MainActivity.this,"Valores Salvos com Sucesso!",Toast.LENGTH_SHORT).show();
             canSave = false;
@@ -225,5 +241,22 @@ public class MainActivity extends AppCompatActivity {
     private void listar(){
         Intent it = new Intent(MainActivity.this,RecyclerActivity.class);
         startActivity(it);
+    }
+
+    private void setActivityResultLauncher(){
+        activityResultLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult activityResult) {
+                        /*int result = activityResult.getResultCode();
+                        Intent data = activityResult.getData();
+
+                        Comandos usados para obter dados da activity criada
+                         */
+                        setLblPadrao();
+                    }
+                }
+        );
     }
 }

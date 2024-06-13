@@ -94,11 +94,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:hint="@string/hintCustom"
-                    android:inputType="numberDecimal"
+                    android:inputType="number"
                     android:layout_toEndOf="@id/rdgRazao"
                     android:layout_alignBottom="@id/rdgRazao"
                     android:enabled="false"
-                    android:visibility="invisible"/>
+                    android:visibility="invisible"
+                    android:autofillHints=""/>
             </RelativeLayout>
 
             <CheckBox

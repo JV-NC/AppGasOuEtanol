@@ -10,7 +10,6 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class UtilGasEta {
-    public static final double PADRAO_70 = 0.7;
     public static String calcularMelhorOpcao(double gasolina, double etanol,double razao){ //utiliza uma razão para retornar melhor opção
         //preço ideal = gasolina * razao
 
@@ -59,5 +58,10 @@ public class UtilGasEta {
             Log.e("reformatarData", "Erro ao transformar a data: " + date);
         }
         return null;
+    }
+
+    public static boolean assertDecimalEquals(double v1, double v2) {
+        double epsilon = 0.000001d;
+        return Math.abs(v1 - v2) < epsilon;
     }
 }

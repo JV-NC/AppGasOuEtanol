@@ -1,5 +1,6 @@
 package br.com.jvn.appgaseta.view;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -24,6 +25,7 @@ import android.widget.Toast;
 import java.text.DecimalFormat;
 
 import br.com.jvn.appgaseta.R;
+import br.com.jvn.appgaseta.apoio.UtilGasEta;
 import br.com.jvn.appgaseta.controller.ConfigController;
 import br.com.jvn.appgaseta.controller.ControllerCombustivel;
 import br.com.jvn.appgaseta.database.GasEtaDB;
@@ -57,7 +59,7 @@ public class ConfigActivity extends AppCompatActivity {
         }
         else{
             rdgRazao.check(R.id.rdbCustom);
-            DecimalFormat df = new DecimalFormat("#0.00");
+            DecimalFormat df = new DecimalFormat("#0");
             tfCustom.setText(df.format(config.getRazao()*100));
             tfCustom.setEnabled(true);
             tfCustom.setVisibility(EditText.VISIBLE);
@@ -105,6 +107,13 @@ public class ConfigActivity extends AppCompatActivity {
                 salvar();
             }
         });
+
+        getOnBackPressedDispatcher().addCallback(ConfigActivity.this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                close();
+            }
+        });
     }
 
     @Override
@@ -148,7 +157,7 @@ public class ConfigActivity extends AppCompatActivity {
     }
 
     private void close(){
-        if(config.getOrder()!=spinnerOrder.getSelectedItemPosition() || config.getDir()!=spinnerDir.getSelectedItemPosition() || config.getDark()!=cbTheme.isChecked()){
+        if(config.getOrder()!=spinnerOrder.getSelectedItemPosition() || config.getDir()!=spinnerDir.getSelectedItemPosition() || config.getDark()!=cbTheme.isChecked() || (config.getIsPadrao07() != (rdgRazao.getCheckedRadioButtonId()==R.id.rdbPadrao) || (rdgRazao.getCheckedRadioButtonId()==R.id.rdbCustom && !UtilGasEta.assertDecimalEquals(config.getRazao(),Double.parseDouble(tfCustom.getText().toString())/100)))){
             AlertDialog alerta;
             AlertDialog.Builder builder = new AlertDialog.Builder(ConfigActivity.this);
             builder.setCancelable(true);
